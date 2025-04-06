@@ -4,12 +4,12 @@ import random
 
 
 class LayerFunctions:
-    def __init__(self, len_data, wyjscie_ilosc=1,optimizer=None,activation_layer=None,  bias=None ):
+    def __init__(self, len_data, wyjscie_ilosc=1,optimizer=None,activation_layer=None ):
         self.len_data = len_data
         self.wyjscia_ilosc = wyjscie_ilosc
         self.optimizer = optimizer
         self.activation_layer = activation_layer
-        self.bias = bias
+        self.bias = None
         self.wagi = None
         self.prog = 0.5
         self.alfa = 0.09
@@ -28,6 +28,33 @@ class LayerFunctions:
         point = np.array(point)
         PROD = np.dot(self.wagi, point)
         return PROD + self.bias
+
+    def backward(self,y_pred,point=None,y_origin=None,weight_forward=None,gradient2=None):
+        ### pierwszy wariant wyliczamy gdy warstw jest warstwą w środku
+        # warunek do lini przekazujemy gradient poprzedniej warstwy i wagi poprzedniej warstwy
+        if gradient2 is not None and weight_forward is  not None:
+            # Mnożenie macierzowe, aby obliczyć gradient dla bieżącej warstwy z wag
+            gradient_activation = self.derivations(y_pred,y_origin)
+            gradient = np.dot(np.transpose(weight_forward), gradient2)
+            gradient *= gradient_activation
+            self.bias -= self.alfa * gradient
+            weight_update = np.zeros_like(self.wagi)
+            for i in range(self.wagi.shape[0]):
+                # alfa * deltawag * wejśćie  czyli poprzednie wyjścia lub punkty wchodzące do sieci
+                weight_update[i] = self.alfa[i] * gradient[i] * point
+            self.wagi -= weight_update
+            return gradient
+
+        else:
+            gradient = self.derivations(y_pred, y_origin)
+            self.bias -= self.alfa * gradient
+            weight_update = np.zeros_like(self.wagi)
+            for i in range(self.wagi.shape[0]):
+                # alfa * deltawag * wejśćie  czyli poprzednie wyjścia lub punkty wchodzące do sieci
+                weight_update[i] = self.alfa[i] * gradient[i] * point
+            self.wagi -= weight_update
+            return gradient
+
     def softmax(cls, suma_wazona):
         return np.exp(suma_wazona) / np.sum(np.exp(suma_wazona))
 
@@ -42,6 +69,20 @@ class LayerFunctions:
                             np.where(suma_wazona < 0, 0.01 * (np.exp(suma_wazona) - 1), 0))
         if self.activation_layer == "Relu":
             return np.maximum(0, suma_wazona)
+
+    def derivations(self, y_pred, y_origin):
+        if self.activation_layer == "softmax":
+            pass
+
+        if self.activation_layer == "sigmoid":
+            return y_pred * (np.ones_like(y_pred) - y_pred)
+
+        if self.activation_layer == "Elu":
+            alpha = self.alfa
+            return np.where(y_pred >= 0, 1, alpha * np.exp(y_pred))
+
+        if self.activation_layer == "Relu":
+            return np.where(y_pred >= 1, 1, 0)
 
     def start(self, alfa=None):
         self.random_alfa(alfa)

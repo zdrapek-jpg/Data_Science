@@ -88,6 +88,7 @@ class Transformations:
                 new_data[f"x{i}"]= [np.log(x+granica_0) for x in list_containing_column_values]
         return new_data
 
+
     # punkt do przetworzenia
     def normalize_one_point(self, point):
         if not (isinstance(point, list)):

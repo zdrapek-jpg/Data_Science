@@ -30,7 +30,7 @@ class OneHotEncoder:
             self.decoded_set[key]=row.tolist()
             i +=1
         return self.decoded_set
-
+    #zamiast data podać rozmiar pierwszego wymmiaru danych
     def code_y_for_network(self, data):
         new_data_Frame_coded = pd.DataFrame(columns=self.decoded_set.keys())
         print(new_data_Frame_coded)
