@@ -33,11 +33,11 @@ class OneHotEncoder:
     #zamiast data podać rozmiar pierwszego wymmiaru danych
     def code_y_for_network(self, data):
         new_data_Frame_coded = pd.DataFrame(columns=self.decoded_set.keys())
-        print(new_data_Frame_coded)
+        #print(new_data_Frame_coded)
         for i in range(len(data)):
             new_data_Frame_coded.loc[i] = self.decoded_set[data[i]]
 
-        print(new_data_Frame_coded)
+        #print(new_data_Frame_coded)
         #zwraca dataframe który ma rozmiar  ilość wierszy X ilość klas
         return new_data_Frame_coded
 

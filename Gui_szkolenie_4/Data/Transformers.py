@@ -59,33 +59,34 @@ class Transformations:
     def standarization_of_data(self,data):
         self.minimums = data.min()
         self.maximums = data.max()
-        new_data = pd.DataFrame()
+        new_data = pd.DataFrame(columns= data.keys())
+        klucze = list(data.keys())
 
         if self.std_type.value=="normalization":
 
             for i, (MIN,MAX) in enumerate(zip(self.minimums,self.maximums)):
                 list_containing_column_values = data.iloc[:,i].values.tolist()
-                new_data[f"x{i}"]= [ round((x- MIN)/(MAX-MIN),6) for x in list_containing_column_values]
+                new_data[klucze[i]]= [ round((x- MIN)/(MAX-MIN),6) for x in list_containing_column_values]
 
         elif self.std_type.value=="mean_score":
             for i, (MIN,MAX) in enumerate(zip(self.minimums,self.maximums)):
                 list_containing_column_values = data.iloc[:,i].values.tolist()
                 srednia_kolumny= self.srednia(list_containing_column_values)
                 self.srednie.append(srednia_kolumny)
-                new_data[f"x{i}"]= [(x- srednia_kolumny)/(MAX-MIN) for x in list_containing_column_values]
+                new_data[klucze[i]]= [(x- srednia_kolumny)/(MAX-MIN) for x in list_containing_column_values]
 
         elif self.std_type.value =="standaryzacja_z_score":
             for i in range(data.shape[-1]):
                 list_containing_column_values = data.iloc[:, i].values.tolist()
                 srednia_kolumny = self.srednia(list_containing_column_values)
                 std =self.odchylenie_standardowe(srednia_kolumny,list_containing_column_values)
-                new_data[f"x{i}"] = [(x -srednia_kolumny)/std for x in list_containing_column_values]
+                new_data[klucze[i]] = [(x -srednia_kolumny)/std for x in list_containing_column_values]
 
         elif self.std_type.value =="log_scalling" :
             granica_0 =np.finfo(float).eps()
             for i in range(data.shape[-1]):
                 list_containing_column_values = data.iloc[:, i].values.tolist()
-                new_data[f"x{i}"]= [np.log(x+granica_0) for x in list_containing_column_values]
+                new_data[klucze[i]]= [np.log(x+granica_0) for x in list_containing_column_values]
         return new_data
 
 
