@@ -3,16 +3,18 @@ import pandas as pd
 
 
 class OneHotEncoder:
+    __slots__ = ["decoded_set","label_code","number_of_coded_keys"]
     def __init__(self,data):
         self.decoded_set = []
         self.label_code={}
         self.number_of_coded_keys=0
         pass
 
-    """
-    :return dict like :{"a": [1,0,0], "b":[0,1,0] .....}
-    """
     def code_keys(self,data):
+        """
+            :parameter data pd.DataFrame
+            :return dict like :{"a": [1,0,0], "b":[0,1,0] .....}
+            """
         set_label = list(set(data))  # {a,b,c,d,e}
         #  z {a,b,c,d,e} przechodzimy na => {1,2,3,4,5}
         self.label_code= {i:el for i,el in enumerate(set_label)}
@@ -31,7 +33,12 @@ class OneHotEncoder:
             i +=1
         return self.decoded_set
     #zamiast data podać rozmiar pierwszego wymmiaru danych
+
     def code_y_for_network(self, data):
+        """
+        :argument data in pd.DataFrame to transform
+        :return data frame with keys() from code_keys and data splited with sepecific labels
+        """
         new_data_Frame_coded = pd.DataFrame(columns=self.decoded_set.keys())
         #print(new_data_Frame_coded)
         for i in range(len(data)):
@@ -41,11 +48,13 @@ class OneHotEncoder:
         #zwraca dataframe który ma rozmiar  ilość wierszy X ilość klas
         return new_data_Frame_coded
 
-    """
-    :param: y pred is list - sequence of soft max predictions of classes  
-       :return dict like :{"a": [1,0,0], "b":[0,1,0] .....}
-       """
+
     def decode_keys(self,y_pred):
+        """
+          :param: y pred is list - sequence of soft max predictions of classes
+          max argument (1) and return dict  :{"a": [1,0,0], "b":[0,1,0] .....}
+             :return for [0,1,0,0] ->b
+             """
         index_max =np.argmax(y_pred)
         #print(index_max)
         if 0 <= index_max <1:  # Avoid IndexError

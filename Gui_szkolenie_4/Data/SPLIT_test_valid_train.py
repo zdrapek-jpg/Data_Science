@@ -5,19 +5,25 @@ class SplitData:
     valid = 0.4
     test = 0.2
 
+
+    """
+    :parameter train , valid,tests should sum to 1.0
+    :param paramters defind how data will be splited with split_data()
+    """
     @classmethod
     def set(cls,train=0.4,valid=0.4,test=0.2):
         cls.train = train  # 0.40
         cls.valid = valid  # 0.40
         cls.test = test  # 0.20
 
-    """data must be in data frame where [ x] :
-     and last column is named label and it reprezented by y
-       data can be normalized bofor spliling   
-       basic setting is train = 0.4 valid =0 .4 and test=0.2"""
+
 
     @classmethod
     def split_data(cls,data):
+        """data must be in data frame where [ x] :
+        and last column is named label and it reprezented by y
+        data can be normalized bofor spliling
+        basic setting is train = 0.4 valid =0 .4 and test=0.2"""
         if cls.train+cls.valid+cls.test<1:
             cls.train+= 1 - (cls.valid+cls.test)
         if  0>cls.train+cls.valid+cls.test>1:
@@ -35,8 +41,14 @@ class SplitData:
         x_valid,y_valid = shuffled_data.iloc[split1:split2,:-1].values, shuffled_data.iloc[split1:split2,-1].values
         x_test,y_test = shuffled_data.iloc[split2:,:-1].values,         shuffled_data.iloc[split2:,-1].values
         return x_train,y_train,x_valid,y_valid,x_test,y_test
+
     @classmethod
     def tasowanie(cls,data,f= False):
+        """
+        :param data is pd.DataFrame object
+        :param f  when is set to False it splits data for x and y
+        :param f  is set to True it returns pd.DataFrame
+        """
         shuffled_data = data.sample(frac=1).reset_index(drop=True)
         if f:
             return shuffled_data
@@ -44,11 +56,22 @@ class SplitData:
 
     @classmethod
     def merge(cls,x,y):
+        """
+        :return x and y merged into one dataframe with last colum named y"""
+
         data = pd.DataFrame(x, columns=[f"x{i}" for i in range(x.shape[1])])
         data["y"] = y
         return data
+
     @classmethod
     def batch_split_data(cls,data_frame,size):
+        """
+          :param dataframe is pd.DataFrame
+          :param size defines size of every batch
+
+          function shuffle data and cretates batches in list of x nad y
+          :return list of batches  x,y
+          """
         shuffled_data = SplitData.tasowanie(data_frame,f=True)
 
         # ile jest elementów

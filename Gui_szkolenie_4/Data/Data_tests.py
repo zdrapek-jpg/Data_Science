@@ -9,7 +9,7 @@ from Data.One_hot_Encoder import OneHotEncoder
 
 #x = [[2.1,3.8,1.6],[4.5,3.1,3.2],[1.3,2.8,1.2],[2.1,1.0,0.5],[0.2,1.6,0.3],[0.4,2.1,2.61],[2.1,1.7,3.3]]
 #y = [1,0,1,0,1,2,2]
-x =[[5.1,5.0],[4.9,1]]
+x =[[0.2,1],[1.9,0.3]]
 y = [0,1]
 #create pandas data frame with x,y
 data_frame = pd.DataFrame(x, columns=[f"x{i}" for i in range(len(x[0])) ])
@@ -25,19 +25,19 @@ x = data.iloc[:,:-1]
 norma = Transformations(x,std_type=StandardizationType.NORMALIZATION)
 x = norma.standarization_of_data(x)
 print(x)
-#
-# #normalizacja danych metodą mean_score
-# norma = Transformations(x,std_type=StandardizationType.NORMALIZATION)
-# x = norma.standarization_of_data(x)
-#
-# #normalizacja danych metodą z_score
-# norma = Transformations(x,std_type=StandardizationType.NORMALIZATION)
-# x = norma.standarization_of_data(x)
-#
-#
-# #normalizacja danych metodą logarytmu
-# norma = Transformations(x,std_type=StandardizationType.NORMALIZATION)
-# x = norma.standarization_of_data(x)
+
+#normalizacja danych metodą mean_score
+norma = Transformations(x,std_type=StandardizationType.NORMALIZATION)
+x = norma.standarization_of_data(x)
+
+#normalizacja danych metodą z_score
+norma = Transformations(x,std_type=StandardizationType.NORMALIZATION)
+x = norma.standarization_of_data(x)
+
+
+#normalizacja danych metodą logarytmu
+norma = Transformations(x,std_type=StandardizationType.NORMALIZATION)
+x = norma.standarization_of_data(x)
 
 
 # złączenie danych x i y
@@ -76,3 +76,4 @@ print(one_h.label_code)
 print(one_h.code_y_for_network(x))
 #print(one_h.decode_keys([0.5,0.2,0.1,0.34,0.3]))
 print(one_h.number_of_coded_keys)
+
