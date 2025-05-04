@@ -1,0 +1,158 @@
+Index: main.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/main.py b/main.py
+--- a/main.py	
++++ b/main.py	(date 1745784291436)
+@@ -12,20 +12,41 @@
+ file_path = r"C:\Program Files\Pulpit\Data_science\Gui_szkolenie_4\TrainData\new_data.csv"
+ 
+ #zapisanie dnaych do pliku i wczytanie z pliku do bazy danych !!!
+-data= ""
+ def data_preprocessing(file_path):
+     merged_data = pd.read_csv(file_path,
+                               delimiter=";")
+     #print( merged_data["HasCrCard"].unique() )
+-
++    return merged_data
++
++merged_data = data_preprocessing(file_path)
++keys = merged_data.columns
++print(keys)
++def data_preprocessing():
++    file_path = r"C:\Program Files\Pulpit\Data_science\Gui_szkolenie_4\TrainData\new_data.csv"
++
++    # merged_data["HasCrCard"] = pd.to_numeric(merged_data.loc[:, "HasCrCard"])
++    # merged_data["loan"] = np.where(merged_data["loan"] =="yes", 1, 0)
++    # merged_data["Gender"] = np.where(merged_data["Gender"] == "Male", 1, 0)
++    # #print(pd.unique(merged_data["HasCrCard"]))
++    # normal  = merged_data.iloc[:,[2,3,4,12]]
++    merged_data = pd.read_csv(file_path,
++                              delimiter=";")
++    # print( merged_data["HasCrCard"].unique() )
+ 
+     merged_data["HasCrCard"] = pd.to_numeric(merged_data.loc[:, "HasCrCard"])
+-    #print(merged_data)
++    # print(merged_data)
+     ## dane dla one hot encodera
+     col1one_hot = [2, 9, 10, 11]
+     # kolumna za pomocą normalizacji danych
+     col2_norm = [1, 4, 5, 6, 7, 8, 12]
+     y = merged_data.loc[:, "y"]
++
++    #print(merged_data)
++    ## dane dla one hot encodera
++    col1one_hot = [2, 9, 10, 11]
++    # kolumna za pomocą normalizacji danych
++    col2_norm = [1, 4, 5, 6, 7, 8, 12]
++    y = merged_data.loc[:, "y"]
+     # 13 i 14 jest poprostu zamieniana  na 0 lub 1 więc nie trzeba używać one hot encodera
+     for_normalization = merged_data.iloc[:, col2_norm]
+     for_one_hot = merged_data.iloc[:, col1one_hot]
+@@ -68,12 +89,13 @@
+         data_set = pd.concat((data_set, data_modified), axis=1)
+     #print(code,sep="\n")
+ 
+-    one_hot.save_data(code)
++    #one_hot.save_data(code)
+ 
+     data_set = pd.concat((data_set, trained_data), axis=1)
++    #data_set = pd.concat((data_set, normal), axis=1)
+     y.replace(("yes", "no"), (1, 0), inplace=True)
+     data_set["y"] = y
+-    #print(data_set.head(4))
++
+ 
+     return data_set
+ 
+@@ -94,6 +116,8 @@
+     network.write_model()
+     network.create_instance()
+     print("test accuracy:", out)
++    print("train error:", network.loss[-1])
++    print("valid loss: ", network.loss_valid[-1])
+     net_loss = network.loss
+     net_acc = network.train_accuracy
+     valid_loss = network.loss
+@@ -125,44 +149,48 @@
+     #print("\n", network.after()
+ 
+ 
+-def modify_user_input_for_network():
+-    test = pd.DataFrame(
+-        [[500, "France", "Male", 2, 1, 1, 101348.88, 58, "management", "married", "tertiary", 6429, "no"]],
+-        columns=range(13))
+-    col1one_hot = [2, 9, 10, 11]
+-
+-    col2_norm = [1, 4, 5, 6, 7, 8, 12]
+-    for_normalization = test[col2_norm]
+-    for_one_hot = test[col1one_hot]
+-    # print(for_normalization)
+-    # print(for_one_hot)
++def modify_user_input_for_network(keys):
++    merged_data = pd.DataFrame(
++        ##Index(['CreditScore', 'Country', 'Gender', 'Tenure', 'HasCrCard','IsActiveMember', 'EstimatedSalary', 'age', 'job', 'marital','education', 'balance', 'loan']
++        [[619,"France","Female",2,1,1,101348.88,58,"management","married","tertiary",6429,"no","yes"]],
++        columns=keys
++    )
++    merged_data["loan"] = np.where(merged_data["loan"] == "yes", 1, 0)
++    merged_data["Gender"] = np.where(merged_data["Gender"] == "Male", 1, 0)
++    col1one_hot = [1, 3, 8, 9, 10, ]
++    # kolumna index 2,12 jest pod numeric
++    # kolumna za pomocą normalizacji danych
++    col2_norm = [0, 4, 5, 6, 7, 11]
++    for_normalization = merged_data.iloc[:,col2_norm]
++    for_one_hot = merged_data.iloc[:,col1one_hot]
++    print(merged_data)
+ 
+     from Data.Transformers import StandardizationType, Transformations
+     # std zawiera informacje które są wykorzystywane przy transformacji punktu
+-    std = Transformations(for_normalization, StandardizationType.Z_SCORE)
+-    trained_data = std.normalize_one_point(for_normalization.values.tolist())
+-    # print(trained_data)
++    std = Transformations(for_normalization, StandardizationType.NORMALIZATION)
++    for_input_data = std.normalize_one_point(for_normalization.values.tolist())
++    #print(for_input_data)
+ 
+     ## save data
+-    std.save_data()
++
+ 
+     data_set = pd.DataFrame()
+ 
+-    encoder_instance = OneHotEncoder.load_data_createInstance()
+-
+-    instance = OneHotEncoder(for_one_hot)
+-    for k, klucz_wartosc_zdekodowane in zip(for_one_hot.keys(), encoder_instance):
+-        data = for_one_hot.loc[:, k].values
+-        print(klucz_wartosc_zdekodowane)
+-        instance.code_y_for_network(data)
++    one_hot  =OneHotEncoder(merged_data)
++    one_hot.load_data()
+ 
+-        ### potrzebuje tylko decoded set ponieważ on zaweira dane w
+-        ## 'unknown': [1.0, 0.0, 0.0, 0.0], 'secondary': [0.0, 1.0, 0.0, 0.0] ...
+-        # print(one_hot.decoded_set)
++    # for k, klucz_wartosc_zdekodowane in zip(for_one_hot.keys(), encoder_instance):
++    #     data = for_one_hot.loc[:, k].values
++    #     print(klucz_wartosc_zdekodowane)
++    #     instance.code_y_for_network(data)
++    #
++    #     ### potrzebuje tylko decoded set ponieważ on zaweira dane w
++    #     ## 'unknown': [1.0, 0.0, 0.0, 0.0], 'secondary': [0.0, 1.0, 0.0, 0.0] ...
++    #     # print(one_hot.decoded_set)
++    #
++    #     data_modified = encoder_instance.code_y_for_network(data)
++    #     data_set = pd.concat((data_set, data_modified), axis=1)
+ 
+-        data_modified = encoder_instance.code_y_for_network(data)
+-        data_set = pd.concat((data_set, data_modified), axis=1)
+-
+-
+-data =data_preprocessing(file_path)
++#modify_user_input_for_network(keys)
++data =data_preprocessing()
+ print(training(data))
+\ No newline at end of file

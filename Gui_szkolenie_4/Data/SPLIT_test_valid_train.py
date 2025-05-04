@@ -1,15 +1,18 @@
-
+import numpy as np
 import pandas as pd
+
 class SplitData:
+    __dict__ = ["train","valid","test"]
+    """
+        A class to split a dataset into training, validation, and test sets.
+        Parameters:
+            train (float):  Default is 0.4.
+            valid (float):  Default is 0.4.
+            test (float):  Default is 0.2.
+        The sum of train, valid, and test must be 1.0."""
     train = 0.4
     valid = 0.4
     test = 0.2
-
-
-    """
-    :parameter train , valid,tests should sum to 1.0
-    :param paramters defind how data will be splited with split_data()
-    """
     @classmethod
     def set(cls,train=0.4,valid=0.4,test=0.2):
         cls.train = train  # 0.40
@@ -19,10 +22,10 @@ class SplitData:
 
 
     @classmethod
-    def split_data(cls,data):
+    def split_data(cls,data:pd.core.frame.DataFrame)->np.array:
         """data must be in data frame where [ x] :
-        and last column is named label and it reprezented by y
-        data can be normalized bofor spliling
+        and last column is  y
+        data must be normalized bofor splitting
         basic setting is train = 0.4 valid =0 .4 and test=0.2"""
         if cls.train+cls.valid+cls.test<1:
             cls.train+= 1 - (cls.valid+cls.test)
@@ -44,29 +47,23 @@ class SplitData:
 
     @classmethod
     def tasowanie(cls,data,f= False):
-        """
-        :param data is pd.DataFrame object
-        :param f  when is set to False it splits data for x and y
-        :param f  is set to True it returns pd.DataFrame
-        """
+        """ :param data is pd.DataFrame object
+            :param f  when is set to False it splits data for x and y
+            :param f  is set to True it returns pd.DataFrame"""
         shuffled_data = data.sample(frac=1).reset_index(drop=True)
-        if f:
-            return shuffled_data
+        if f:  return shuffled_data
         return shuffled_data.iloc[:, :-1].values, shuffled_data.loc[:, "y"]
-
     @classmethod
-    def merge(cls,x,y):
-        """
-        :return x and y merged into one dataframe with last colum named y"""
-
+    def merge(cls,x,y)->pd.core.frame.DataFrame:
+        """:return x and y merged into one dataframe with last colum named y"""
         data = pd.DataFrame(x, columns=[f"x{i}" for i in range(x.shape[1])])
         data["y"] = y
         return data
 
     @classmethod
-    def batch_split_data(cls,data_frame,size):
+    def batch_split_data(cls,data_frame,size:int)->tuple[list,list]:
         """
-          :param dataframe is pd.DataFrame
+          :param data_frame is pd.DataFrame
           :param size defines size of every batch
 
           function shuffle data and cretates batches in list of x nad y
