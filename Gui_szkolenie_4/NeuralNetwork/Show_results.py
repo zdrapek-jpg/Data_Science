@@ -15,7 +15,7 @@ def show_training_process(train_acc: list, train_loss: list, valid_acc: list, va
     """
     assert(len(train_loss)==len(train_acc)==len(valid_acc)==len(valid_loss)),f"dane powinny zaweirać taki sam rozmiar{len(train_acc)}=={len(train_acc)}=={len(valid_acc)}=={len(valid_loss)}"
     from matplotlib import pyplot as plt
-    fig = plt.figure(figsize=(12, 7))
+    fig = plt.figure(figsize=(10, 7))
     ax1 = fig.add_subplot(111)
     ax1.set_ylim([0,1.1])
 
@@ -27,9 +27,9 @@ def show_training_process(train_acc: list, train_loss: list, valid_acc: list, va
     ax1.plot(train_acc, label="train Accuracy", color=(0.6, 0.4, 0.1, 0.4))
     # Scatter test points
     ax1.scatter(maxi, test_acc, s=80,
-            color=(0.2, 0.1, 0.9, 0.9), edgecolors='pink', label="acc", linewidths=0.8, zorder=5)
+            color=(0.2, 0.1, 0.7, 0.9), edgecolors='pink', label="acc", linewidths=0.8, zorder=5)
     ax1.scatter(maxi, test_loss, s=80,
-            color=(0.1, 0.1, 0.8, 0.9), edgecolors='pink', label="loss", linewidths=0.8, zorder=5)
+            color=(0.1, 0.2, 0.8, 0.9), edgecolors='pink', label="loss", linewidths=0.8, zorder=5)
     # ✅ Add annotations (text above points)
     ax1.annotate(f"{test_acc:.2f}", (maxi, test_acc), textcoords="offset points", xytext=(0, 8), ha='center',fontsize=8)
     ax1.annotate(f"{test_loss:.2f}", (maxi, test_loss), textcoords="offset points", xytext=(0, 8), ha='center', fontsize=8)

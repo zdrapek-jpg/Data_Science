@@ -1,9 +1,12 @@
 #! Pyton 10.0
 # load_user_data.py
-from Data.One_hot_Encoder import OneHotEncoder
+from One_hot_Encoder import OneHotEncoder
 import numpy as np
 import pandas as pd
 import sys
+from NeuralNetwork.Network_single_class import NNetwork
+import os 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
 
@@ -32,7 +35,7 @@ def modify_user_input_for_network(data, klucze=['Surname', 'CreditScore',
     for_one_hot = merged_data.iloc[:,col1one_hot].values.tolist()
 
 
-    from Data.Transformers import StandardizationType, Transformations
+    from Transformers import StandardizationType, Transformations
     # std zawiera informacje które są wykorzystywane przy transformacji punktu
     std = Transformations.load_data()
     #print(type(std),print(std.srednie))
@@ -54,7 +57,7 @@ def modify_user_input_for_network(data, klucze=['Surname', 'CreditScore',
 
         sett = one_hot.code_y_for_network(data_for_transform)
         data_as_1_row = pd.concat((data_as_1_row, sett), axis=1)
-    print(sett)
+    #print(sett)
 
     data_as_1_row["HasCrCard"] = merged_data["HasCrCard"].values
     data_as_1_row["loan"] = merged_data["loan"].values
@@ -64,16 +67,25 @@ def modify_user_input_for_network(data, klucze=['Surname', 'CreditScore',
     #print(data_as_1_row)
     return data_as_1_row.values
 
-
 from json import loads, dumps
+from flask import Flask, request, jsonify
 from NeuralNetwork.Network_single_class import NNetwork
 
-if __name__ == "__main__":
-    #input_json = input_list = ["Henryk",619,"France","Female",2,1,1,101348.88,58,"management","married","tertiary",6429,"no"]
 
-    input_json = sys.argv[1]
-    input_list = loads(input_json)
-    user_input_for_network = modify_user_input_for_network(input_list)[0]
-    model = NNetwork.create_instance()
-    y_predicted =model.pred(user_input_for_network)
-    print(dumps(y_predicted))  # Output result as JSON
+app = Flask(__name__)
+
+# Post
+@app.route('/')
+def predict():
+    user_data = ["Henryk", 619, "France", "Female", 2, 1, 1, 101348.88, 58, "management", "married", "tertiary", 6429,
+                 "no"]
+    ready_for_model = modify_user_input_for_network(user_data)
+    model_instance = NNetwork.create_instance()
+    prediction = model_instance.pred(ready_for_model)
+    return prediction[0]
+
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
+

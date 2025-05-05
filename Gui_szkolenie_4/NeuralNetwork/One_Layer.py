@@ -4,17 +4,22 @@ import random
 
 
 class LayerFunctions:
-    __slots__ = ["len_data","wyjscia_ilosc","optimizer","activation_layer","bias","wagi","alfa","loss","accuracy"]
-    def __init__(self, len_data, wyjscie_ilosc=1,optimizer=None,activation_layer=None ):
+    __slots__ = ["len_data","wyjscia_ilosc","activation_layer","bias","wagi","alfa","loss","accuracy","Beta","weights_exponential_d","biases_exponential_d"]
+    def __init__(self, len_data, wyjscie_ilosc=1,activation_layer=None ):
         self.len_data = len_data
         self.wyjscia_ilosc = wyjscie_ilosc
-        self.optimizer = optimizer
+
         self.activation_layer = activation_layer
         self.bias = None
         self.wagi = None
         self.alfa = 0.09
         #self.one_hot_encoded = None
-
+        # korekta pierwszego rzędu dla 1 parametru momentum
+        self.Beta =0.9
+        #
+        #exponentially weighted averages of derivatives
+        self.weights_exponential_d = None
+        self.biases_exponential_d = None
 
     def train_forward(self, point):
         """
@@ -34,7 +39,7 @@ class LayerFunctions:
         return PROD + self.bias
 
 
-    def backward(self,y_pred,point=None,y_origin=None,weights_forward=None,gradient2=None):
+    def backward_sgd(self,y_pred,point=None,y_origin=None,weights_forward=None,gradient2=None):
         """
               Perform the backward pass (backpropagation) for a single neural network layer.
 
@@ -49,12 +54,12 @@ class LayerFunctions:
               - gradient (np.ndarray): Computed gradient for this layer, to be used by the previous layer.
               """
         ## obiczanie gradientu w pierwszej warstwie od konca
-        if weights_forward is None and gradient2 is None:
+        if weights_forward is None or gradient2 is None:
             pochodna_wyjscia = y_pred-y_origin
             pochodna_aktywacji = self.derivations(y_pred)
             gradient  = pochodna_wyjscia* pochodna_aktywacji
             self.bias  -= self.alfa*gradient
-            self.wagi  -= self.alfa*gradient*point.reshape(1,3)
+            self.wagi  -= self.alfa*gradient*point.reshape(1,12)
             return gradient
 
         # gradient dla wszystkoch warstw ukrytych
@@ -65,20 +70,23 @@ class LayerFunctions:
         self.wagi -= np.outer(gradient,self.alfa)*point
         return gradient
 
+    def backward_momentum(self):
+        pass
+        #w zasadzie to samo tylko
 
-    def activation(self, suma_wazona):  # [macierz wynikowa jednego wymiary tyle ile jest neuronów]
+
+    def activation(self, suma_wazona):
         """
         :return activatiob of product according to choosen self.activation_layer
         """
-        #if self.activation_layer == "softmax":
-        #    return self.softmax(suma_wazona)
+        # [macierz wynikowa jednego wymiary tyle ile jest neuronów]
         if self.activation_layer == "sigmoid":
             z = lambda x: 1 / (1 + np.exp(-x))
             return z(suma_wazona)
-        if self.activation_layer == "Elu":
+        if self.activation_layer == "elu":
             return np.where(suma_wazona > 0, suma_wazona,
                             np.where(suma_wazona < 0, 0.01 * (np.exp(suma_wazona) - 1), 0))
-        if self.activation_layer == "Relu":
+        if self.activation_layer == "relu":
             return np.maximum(0, suma_wazona)
 
     def derivations(self, y_pred):
@@ -88,11 +96,11 @@ class LayerFunctions:
         if self.activation_layer == "sigmoid":
             return y_pred * (np.ones_like(y_pred) - y_pred)
 
-        if self.activation_layer == "Elu":
+        if self.activation_layer == "elu":
             alpha = self.alfa
             return np.where(y_pred >= 0, 1, alpha * np.exp(y_pred))
 
-        if self.activation_layer == "Relu":
+        if self.activation_layer == "relu":
             return np.where(y_pred >= 1, 1, 0)
 
     def start(self, alfa=None):
@@ -110,10 +118,14 @@ class LayerFunctions:
     def random_weights(self):
         self.wagi = np.random.rand( self.len_data,self.wyjscia_ilosc).T*0.8
     def random_bias(self):
-        self.bias = np.array([round(random.random() * random.choice([0.9, 0.9, 0.8, 0.8]), 3)] * self.wyjscia_ilosc).T
+        self.bias = np.random.rand(self.wyjscia_ilosc).T*0.4
     def random_alfa(self,a=None):
         if a!=None:
             self.alfa = np.array([a])
         else:
             x =round(random.random() * 0.65, 3)
             self.alfa = np.array([round(x if x<=0.2 and x>=0.09  else x+0.05 if x<=0.09 else x-0.2,4) ])
+    def return_params(self):
+        return {"wagi":self.wagi,"bias":self.bias,"activation":self.activation_layer}
+    def load_params(self):
+        pass
