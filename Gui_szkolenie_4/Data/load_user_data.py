@@ -1,6 +1,6 @@
 #! Pyton 10.0
 # load_user_data.py
-from One_hot_Encoder import OneHotEncoder
+from Data.One_hot_Encoder import OneHotEncoder
 import numpy as np
 import pandas as pd
 import sys
@@ -73,16 +73,25 @@ from NeuralNetwork.Network_single_class import NNetwork
 
 
 app = Flask(__name__)
-
+import request
 # Post
-@app.route('/')
+@app.route('/',methods=["POST"])
 def predict():
-    user_data = ["Henryk", 619, "France", "Female", 2, 1, 1, 101348.88, 58, "management", "married", "tertiary", 6429,
-                 "no"]
-    ready_for_model = modify_user_input_for_network(user_data)
-    model_instance = NNetwork.create_instance()
-    prediction = model_instance.pred(ready_for_model)
-    return prediction[0]
+    try:
+        user_data = request.get_json()
+        user_data = user_data["user_data"]
+        if not user_data:
+            return  jsonify("Data is empty ")
+        if len(user_data)!=14:
+            return jsonify(f"data is different langth than expected {len(user_data)}!=14")
+        user_data = ["Henryk", 619, "France", "Female", 2, 1, 1, 101348.88, 58, "management", "married", "tertiary", 6429,
+                     "no"]
+        ready_for_model = modify_user_input_for_network(user_data)
+        model_instance = NNetwork.create_instance()
+        prediction = model_instance.pred(ready_for_model)
+        return prediction[0]
+    except Exception as e:
+        return jsonify({"error":"error with "+str(e)},500)
 
 
 

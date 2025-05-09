@@ -27,9 +27,9 @@ def show_training_process(train_acc: list, train_loss: list, valid_acc: list, va
     ax1.plot(train_acc, label="train Accuracy", color=(0.6, 0.4, 0.1, 0.4))
     # Scatter test points
     ax1.scatter(maxi, test_acc, s=80,
-            color=(0.2, 0.1, 0.7, 0.9), edgecolors='pink', label="acc", linewidths=0.8, zorder=5)
+            color=(0.5, 0.1, 0.7, 0.9), edgecolors='pink', label="acc", linewidths=0.8, zorder=5)
     ax1.scatter(maxi, test_loss, s=80,
-            color=(0.1, 0.2, 0.8, 0.9), edgecolors='pink', label="loss", linewidths=0.8, zorder=5)
+            color=(0.1, 0.2, 0.99, 0.9), edgecolors='pink', label="loss", linewidths=0.8, zorder=5)
     # ✅ Add annotations (text above points)
     ax1.annotate(f"{test_acc:.2f}", (maxi, test_acc), textcoords="offset points", xytext=(0, 8), ha='center',fontsize=8)
     ax1.annotate(f"{test_loss:.2f}", (maxi, test_loss), textcoords="offset points", xytext=(0, 8), ha='center', fontsize=8)

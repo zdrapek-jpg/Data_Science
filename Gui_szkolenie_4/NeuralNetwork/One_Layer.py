@@ -4,22 +4,34 @@ import random
 
 
 class LayerFunctions:
-    __slots__ = ["len_data","wyjscia_ilosc","activation_layer","bias","wagi","alfa","loss","accuracy","Beta","weights_exponential_d","biases_exponential_d"]
-    def __init__(self, len_data, wyjscie_ilosc=1,activation_layer=None ):
+    __slots__ = ["len_data","wyjscia_ilosc","activation_layer","bias","wagi","alfa","loss","accuracy","Beta","weights_exponential_d","biases_exponential_d","v_weights","v_biases","optimizer","gradients","epsilion","RMSprop"]
+    def __init__(self, len_data, wyjscie_ilosc=1,activation_layer=None,optimizer=None,gradients=None ):
+
         self.len_data = len_data
         self.wyjscia_ilosc = wyjscie_ilosc
 
         self.activation_layer = activation_layer
         self.bias = None
         self.wagi = None
-        self.alfa = 0.09
+        self.alfa = 0.009
         #self.one_hot_encoded = None
         # korekta pierwszego rzędu dla 1 parametru momentum
-        self.Beta =0.9
-        #
-        #exponentially weighted averages of derivatives
-        self.weights_exponential_d = None
-        self.biases_exponential_d = None
+        self.optimizer =optimizer
+        self.gradients=gradients
+        if self.gradients=="batch" or self.gradients=="mini-batch":
+            self.weights_exponential_d = None
+            self.biases_exponential_d = None
+        if self.optimizer=="momentum":
+            self.Beta =0.9
+            #exponentially weighted averages of derivatives
+            self.v_weights = None
+            self.v_biases = None
+        if self.optimizer=="adagrad":
+            self.epsilion = None
+        if self.optimizer=="adam":
+            self.Beta=0.9
+            self.RMSprop = 0.95
+            self.epsilion = None
 
     def train_forward(self, point):
         """
@@ -40,6 +52,7 @@ class LayerFunctions:
 
 
     def backward_sgd(self,y_pred,point=None,y_origin=None,weights_forward=None,gradient2=None):
+
         """
               Perform the backward pass (backpropagation) for a single neural network layer.
 
@@ -54,27 +67,48 @@ class LayerFunctions:
               - gradient (np.ndarray): Computed gradient for this layer, to be used by the previous layer.
               """
         ## obiczanie gradientu w pierwszej warstwie od konca
-        if weights_forward is None or gradient2 is None:
-            pochodna_wyjscia = y_pred-y_origin
+        if weights_forward is None and  gradient2 is None:
             pochodna_aktywacji = self.derivations(y_pred)
+            pochodna_wyjscia =y_pred-y_origin
+
             gradient  = pochodna_wyjscia* pochodna_aktywacji
             self.bias  -= self.alfa*gradient
             self.wagi  -= self.alfa*gradient*point.reshape(1,12)
             return gradient
+        pochodna_aktywacji = self.derivations(y_pred)
 
         # gradient dla wszystkoch warstw ukrytych
-        pochodna_aktywacji = self.derivations(y_pred)
         gradient =   np.dot(weights_forward.T,gradient2)
         gradient *= pochodna_aktywacji
         self.bias -= self.alfa*gradient
         self.wagi -= np.outer(gradient,self.alfa)*point
         return gradient
 
-    def backward_momentum(self):
-        pass
-        #w zasadzie to samo tylko
+    def backward_batches(self,y_pred=None,point=None,pochodna_wyjscia=None,weights_forward=None,gradient2=None,for_average=None):
+        pochodna_aktywacji = self.derivations(y_pred)
 
+        ## obiczanie gradientu w pierwszej warstwie od konca
+        if pochodna_wyjscia is  not None:
+            gradient = pochodna_wyjscia * pochodna_aktywacji
+            self.biases_exponential_d   +=   gradient
+            self.weights_exponential_d  +=  gradient * point.reshape(1, 12)
+            return gradient
 
+        if weights_forward is not  None:
+            # gradient dla wszystkoch warstw ukrytych
+            gradient = np.dot(weights_forward.T, gradient2)
+            gradient *= pochodna_aktywacji
+            self.biases_exponential_d  +=  gradient
+            self.weights_exponential_d  += np.outer(gradient, 1) * point
+            return  gradient
+
+        self.weights_exponential_d/=for_average
+        self.biases_exponential_d /=for_average
+        self.v_weights = self.Beta * self.v_weights + (1 - self.Beta) * self.weights_exponential_d
+        self.v_biases = self.Beta * self.v_biases + (1 - self.Beta) * self.biases_exponential_d
+
+        self.bias -= self.alfa *self.v_biases
+        self.wagi-= self.alfa* self.v_weights
     def activation(self, suma_wazona):
         """
         :return activatiob of product according to choosen self.activation_layer
@@ -101,7 +135,7 @@ class LayerFunctions:
             return np.where(y_pred >= 0, 1, alpha * np.exp(y_pred))
 
         if self.activation_layer == "relu":
-            return np.where(y_pred >= 1, 1, 0)
+            return np.where(y_pred >= 0, y_pred, 0)
 
     def start(self, alfa=None):
         """
@@ -112,13 +146,22 @@ class LayerFunctions:
         self.random_alfa(alfa)
         self.random_bias()
         self.random_weights()
+        if self.gradients == "batch" or self.gradients == "mini-batch":
+            self.weights_exponential_d = np.zeros_like(self.wagi)
+            self.biases_exponential_d = np.zeros_like(self.bias)
+        if self.optimizer == "momentum":
+            self.v_weights = np.zeros_like(self.wagi)
+            self.v_biases = np.zeros_like(self.bias)
+        if self.optimizer=="adagrad":
+            self.epsilion= 1e-9
+
         return self.alfa[0]
 
 
     def random_weights(self):
-        self.wagi = np.random.rand( self.len_data,self.wyjscia_ilosc).T*0.8
+        self.wagi = np.random.rand( self.len_data,self.wyjscia_ilosc).T*random.choice([0.2,-0.3,-0.2,0.3])
     def random_bias(self):
-        self.bias = np.random.rand(self.wyjscia_ilosc).T*0.4
+        self.bias = np.random.rand(self.wyjscia_ilosc).T*random.choice([0.1,-0.1,-0.2,0.2])
     def random_alfa(self,a=None):
         if a!=None:
             self.alfa = np.array([a])

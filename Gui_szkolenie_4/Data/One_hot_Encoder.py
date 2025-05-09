@@ -82,3 +82,5 @@ class OneHotEncoder:
             print(f"File not found: {file_name}")
         except json.JSONDecodeError:
             print(f"Error decoding JSON in file: {file_name}")
+
+
