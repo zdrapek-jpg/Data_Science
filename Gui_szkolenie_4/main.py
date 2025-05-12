@@ -1,9 +1,7 @@
-from Data.load_user_data import modify_user_input_for_network
 from NeuralNetwork.Training_structre import training
 from NeuralNetwork.getData import data_preprocessing
-import sys
 
-# załadowanie i przetworzenie danych do modelu
+# załadowanie i przetworzenie danych do modelu1
 
 data =data_preprocessing()
 # stworzenie modelu i szkolenie go na danych data

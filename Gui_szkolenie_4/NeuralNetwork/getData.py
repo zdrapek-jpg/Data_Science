@@ -18,6 +18,8 @@ def process_standarization(data_containing_required_columns):
 
     new_std = Transformations.load_data() #  we need to give path we used to save_data
     return trained_data
+def process_one_hot_encoder(data_containing_required_columns):
+    pass
 
 def data_preprocessing():
     merged_data = load_data()
@@ -73,80 +75,80 @@ def data_preprocessing():
     data_set["y"] = y
     return data_set
 
-
-import numpy as np
-
-# Inputs and labels
-X = np.array([[0, 0.5, 1],[0.5, 1.5, 1],[0.5, 1, 1.5],[0, 0.5, 1],[0.5, 1.5, 1],[0.5, 1, 0]])  # shape (2, 3)
-Y = np.array([1,0,1,1,0,0])         # shape (2,)
-
-# Initialize parameters
-wagi = np.random.rand(3)  *0.7     # 3 input features
-biasy = 0.0
-print(wagi)
-# Momentum terms
-Vderivative_like_weights = np.zeros_like(wagi)
-Vb_like_bias = 0.0
-
-# Hyperparameters
-alpha = 0.02    # learning rate
-beta_momentum = 0.9     # momentum
-epochs = 100
-
-# ReLU activation and its derivative
-def relu(z):
-    return np.maximum(0, z)
-
-def relu_derivative(z):
-    return (z > 0).astype(float)
-
-
-# Training loop
-for epoch in range(epochs):
-    dw = np.zeros_like(wagi)
-    db = 0.0
-    loss = 0
-
-    for i in range(len(X)):
-        point = X[i]
-        y = Y[i]
-
-        # Forward pass
-        product = np.dot(wagi, point) + biasy
-        output = relu(product)
-
-        # Compute loss (MSE)
-        loss += 0.5 * (output - y) ** 2
-
-        # Backward pass
-        pochodna_wyjścia = (output - y)
-        pochodna_aktywacji = relu_derivative(product)
-        gradient = pochodna_wyjścia*pochodna_aktywacji
-        dw += gradient * point
-        db += gradient
-
-    # Average gradients
-    dw /= len(X)
-    db /= len(X)
-    loss /= len(X)
-
-    # Momentum update
-    Vderivative_like_weights = beta_momentum * Vderivative_like_weights + (1- beta_momentum) * dw
-    Vb_like_bias = beta_momentum * Vb_like_bias + (1-beta_momentum) * db
-
-    wagi -= alpha * Vderivative_like_weights
-    biasy -= alpha * Vb_like_bias
-
-    if epoch % 10 == 0:
-        print(f"Epoch {epoch}, Loss: {loss:.4f}")
-
-for i in range(len(X)):
-    point = X[i]
-    y = Y[i]
-
-    # Forward pass
-    product = np.dot(wagi, point) + biasy
-    output = relu(product)
-
-print("\nFinal weights:", wagi)
-print("Final bias:", biasy)
+#
+# import numpy as np
+#
+# # Inputs and labels
+# X = np.array([[0, 0.5, 1],[0.5, 1.5, 1],[0.5, 1, 1.5],[0, 0.5, 1],[0.5, 1.5, 1],[0.5, 1, 0]])  # shape (2, 3)
+# Y = np.array([1,0,1,1,0,0])         # shape (2,)
+#
+# # Initialize parameters
+# wagi = np.random.rand(3)  *0.7     # 3 input features
+# biasy = 0.0
+# print(wagi)
+# # Momentum terms
+# Vderivative_like_weights = np.zeros_like(wagi)
+# Vb_like_bias = 0.0
+#
+# # Hyperparameters
+# alpha = 0.02    # learning rate
+# beta_momentum = 0.9     # momentum
+# epochs = 100
+#
+# # ReLU activation and its derivative
+# def relu(z):
+#     return np.maximum(0, z)
+#
+# def relu_derivative(z):
+#     return (z > 0).astype(float)
+#
+#
+# # Training loop
+# for epoch in range(epochs):
+#     dw = np.zeros_like(wagi)
+#     db = 0.0
+#     loss = 0
+#
+#     for i in range(len(X)):
+#         point = X[i]
+#         y = Y[i]
+#
+#         # Forward pass
+#         product = np.dot(wagi, point) + biasy
+#         output = relu(product)
+#
+#         # Compute loss (MSE)
+#         loss += 0.5 * (output - y) ** 2
+#
+#         # Backward pass
+#         pochodna_wyjścia = (output - y)
+#         pochodna_aktywacji = relu_derivative(product)
+#         gradient = pochodna_wyjścia*pochodna_aktywacji
+#         dw += gradient * point
+#         db += gradient
+#
+#     # Average gradients
+#     dw /= len(X)
+#     db /= len(X)
+#     loss /= len(X)
+#
+#     # Momentum update
+#     Vderivative_like_weights = beta_momentum * Vderivative_like_weights + (1- beta_momentum) * dw
+#     Vb_like_bias = beta_momentum * Vb_like_bias + (1-beta_momentum) * db
+#
+#     wagi -= alpha * Vderivative_like_weights
+#     biasy -= alpha * Vb_like_bias
+#
+#     if epoch % 10 == 0:
+#         print(f"Epoch {epoch}, Loss: {loss:.4f}")
+#
+# for i in range(len(X)):
+#     point = X[i]
+#     y = Y[i]
+#
+#     # Forward pass
+#     product = np.dot(wagi, point) + biasy
+#     output = relu(product)
+#
+# print("\nFinal weights:", wagi)
+# print("Final bias:", biasy)

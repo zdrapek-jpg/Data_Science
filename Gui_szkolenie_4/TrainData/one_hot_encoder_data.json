@@ -6,12 +6,12 @@
     0.0,
     0.0
    ],
-   "Germany": [
+   "Spain": [
     0.0,
     1.0,
     0.0
    ],
-   "Spain": [
+   "Germany": [
     0.0,
     0.0,
     1.0
@@ -19,14 +19,14 @@
   },
   "label_code": {
    "0": "France",
-   "1": "Germany",
-   "2": "Spain"
+   "1": "Spain",
+   "2": "Germany"
   },
   "number_of_coded_keys": 3
  },
  {
   "job": {
-   "housemaid": [
+   "entrepreneur": [
     1.0,
     0.0,
     0.0,
@@ -40,7 +40,7 @@
     0.0,
     0.0
    ],
-   "unknown": [
+   "blue-collar": [
     0.0,
     1.0,
     0.0,
@@ -54,11 +54,25 @@
     0.0,
     0.0
    ],
-   "services": [
+   "admin.": [
     0.0,
     0.0,
     1.0,
     0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "self-employed": [
+    0.0,
+    0.0,
+    0.0,
+    1.0,
     0.0,
     0.0,
     0.0,
@@ -72,8 +86,8 @@
     0.0,
     0.0,
     0.0,
-    1.0,
     0.0,
+    1.0,
     0.0,
     0.0,
     0.0,
@@ -82,13 +96,13 @@
     0.0,
     0.0
    ],
-   "admin.": [
+   "unemployed": [
+    0.0,
     0.0,
     0.0,
     0.0,
     0.0,
     1.0,
-    0.0,
     0.0,
     0.0,
     0.0,
@@ -102,37 +116,9 @@
     0.0,
     0.0,
     0.0,
-    1.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0
-   ],
-   "retired": [
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
     0.0,
     1.0,
     0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0
-   ],
-   "blue-collar": [
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    1.0,
     0.0,
     0.0,
     0.0,
@@ -146,29 +132,13 @@
     0.0,
     0.0,
     0.0,
-    0.0,
     1.0,
+    0.0,
     0.0,
     0.0,
     0.0
    ],
-   "entrepreneur": [
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    1.0,
-    0.0,
-    0.0
-   ],
-   "unemployed": [
-    0.0,
-    0.0,
+   "services": [
     0.0,
     0.0,
     0.0,
@@ -178,9 +148,39 @@
     0.0,
     0.0,
     1.0,
+    0.0,
+    0.0,
     0.0
    ],
-   "self-employed": [
+   "retired": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ],
+   "housemaid": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0
+   ],
+   "unknown": [
     0.0,
     0.0,
     0.0,
@@ -196,29 +196,29 @@
    ]
   },
   "label_code": {
-   "0": "housemaid",
-   "1": "unknown",
-   "2": "services",
-   "3": "student",
-   "4": "admin.",
-   "5": "management",
-   "6": "retired",
-   "7": "blue-collar",
-   "8": "technician",
-   "9": "entrepreneur",
-   "10": "unemployed",
-   "11": "self-employed"
+   "0": "entrepreneur",
+   "1": "blue-collar",
+   "2": "admin.",
+   "3": "self-employed",
+   "4": "student",
+   "5": "unemployed",
+   "6": "management",
+   "7": "technician",
+   "8": "services",
+   "9": "retired",
+   "10": "housemaid",
+   "11": "unknown"
   },
   "number_of_coded_keys": 12
  },
  {
   "marital": {
-   "divorced": [
+   "single": [
     1.0,
     0.0,
     0.0
    ],
-   "single": [
+   "divorced": [
     0.0,
     1.0,
     0.0
@@ -230,8 +230,8 @@
    ]
   },
   "label_code": {
-   "0": "divorced",
-   "1": "single",
+   "0": "single",
+   "1": "divorced",
    "2": "married"
   },
   "number_of_coded_keys": 3
@@ -244,19 +244,19 @@
     0.0,
     0.0
    ],
-   "unknown": [
-    0.0,
-    1.0,
-    0.0,
-    0.0
-   ],
    "primary": [
     0.0,
-    0.0,
     1.0,
+    0.0,
     0.0
    ],
    "secondary": [
+    0.0,
+    0.0,
+    1.0,
+    0.0
+   ],
+   "unknown": [
     0.0,
     0.0,
     0.0,
@@ -265,9 +265,9 @@
   },
   "label_code": {
    "0": "tertiary",
-   "1": "unknown",
-   "2": "primary",
-   "3": "secondary"
+   "1": "primary",
+   "2": "secondary",
+   "3": "unknown"
   },
   "number_of_coded_keys": 4
  }

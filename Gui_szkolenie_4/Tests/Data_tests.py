@@ -1,8 +1,9 @@
 # Testy wszystkich funkcjonalności złożonych z danych
 
 from Data.Transformers import Transformations
-from Multiple_points import multiply
+from Data.Multiple_points import multiply
 from Data.Transformers import Transformations,StandardizationType
+from Data.SPLIT_test_valid_train import SplitData
 import numpy as np
 import pandas as pd
 from Data.One_hot_Encoder import OneHotEncoder
@@ -48,7 +49,6 @@ print(data_frame)
 
 
 # metoda dzieląca dane
-from SPLIT_test_valid_train import *
 #definiowanie  podziału  treningowe|validacyjne|testowe
 sd = SplitData.set(0.5,0.3,0.2)
 x_train,y_train,x_valid,y_valid,x_test,y_test = SplitData.split_data(data_frame)
@@ -65,15 +65,28 @@ for x_,y_ in zip(x,y):
 
 
 ## testy one_hot_enocdoera kodowanie i tworzenie zbioru danych do treningu
-x=["a","b","c","d","e","e"]
-y = [1,1,0,0,0,0]
+x={"kasza":["a","b","c","d","e","e"],
+   "masza":["kura","dziura","kinga","dziura","małpa","małpa"]
+   }
+y = [1,1,0,5,5,0]
+new_d = pd.Series(["średnia","wysoka","niska","wysoka","niska","niska"],name="temperature")
 d = pd.DataFrame(x)
-d["y"]=y
+d["y"] = y
+d =pd.concat((d,new_d),axis=1)
 one_h = OneHotEncoder(d)
-one_h.code_keys(x)
-print(one_h.decoded_set)
-print(one_h.label_code)
-print(one_h.code_y_for_network(x))
-#print(one_h.decode_keys([0.5,0.2,0.1,0.34,0.3]))
-print(one_h.number_of_coded_keys)
+print()
+#print(d)
+one_h.new_one_hot_encoder_keys(d.iloc[:,:-2])
+one_h.new_label_encoder_keys(d.iloc[:,[-1,-2]],[["niska","średnia","wysoka"],[5,1,0]])
+#print(one_h.data_code)
+one_h.new_code_y_for_network(d)
+new =pd.DataFrame([["a","kinga",5,"wysoka"]],columns=d.columns)
+print(new)
+output = one_h.new_code_y_for_network(new)
+print(output)
+
+
+
+
+
 

@@ -32,11 +32,11 @@ def randomize(wspolrzedna, rate=0.1):
 
 
 
-
-from Multiple_points import multiply
-data = pd.DataFrame([[1,2,3,0]],columns=["a","b","c","y"])
-print("data before: ",data.values)
-print("data after multiply 4 times without error ")
-
-xmult = multiply(data,4,0)
-print(xmult.values)
+#
+# from Multiple_points import multiply
+# data = pd.DataFrame([[1,2,3,0]],columns=["a","b","c","y"])
+# print("data before: ",data.values)
+# print("data after multiply 4 times without error ")
+#
+# xmult = multiply(data,4,0)
+# print(xmult.values)

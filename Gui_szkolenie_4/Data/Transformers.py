@@ -187,18 +187,20 @@ class Transformations:
             print(f"Invalid JSON format in {full_path}")
         return None
 
-
-
-
-
-
-
-
-
-
-
-
-
+# odcinanie punktów dla standaryzacja
+# def standaryzacja_data(data,flag = True):
+#     suma =  sum(data)
+#     dl = len(data)
+#     xs = suma/dl
+#     s =odchylenie_standardowe(xs,data)
+#
+#     normalized=   [round(((x-xs)/s),4)  for x in data ]
+#     print(f" po normalizacji {normalized}, {s}")
+#     dane = [ x for x,y in zip (data,normalized) if y >-2.5 and y<2.5]
+#     print(f"dane pomnijeszod po odcięci punktów granicznych {data} obicęto {len(data)-len(dane)} :")
+#     if flag:
+#         return standaryzacja_data(dane,flag = False)
+#     return normalized
 
 
 

@@ -2,36 +2,73 @@ import numpy as np
 import random
 
 
+class LayerModificationMetaClass(type):
+    """
+    Purpose of this class is to add attributes and their values especially for
+    create fields
+    """
+    def __new__(cls, name, bases, dct):
+        original_init = dct.get('__init__')
 
-class LayerFunctions:
+        def new_init(self, len_data, wyjscie_ilosc=1, activation_layer=None, optimizer=None, gradients=None):
+            original_init(self, len_data, wyjscie_ilosc, activation_layer, optimizer, gradients)
+
+            # Dynamic initialization based on optimizer
+            if self.optimizer in ["momentum", "adam"]:
+                self.v_weights = np.zeros((len_data,wyjscie_ilosc)).T
+                self.v_biases =     np.zeros(wyjscie_ilosc).T
+                self.Beta = 0.9
+
+            if self.optimizer in ["adam"]:
+                self.RMSprop = 0.95
+                self.epsilion = 1e-8
+
+            if self.gradients in ["batch", "mini-batch"]:
+                self.weights_exponential_d = np.zeros((len_data,wyjscie_ilosc)).T
+                self.biases_exponential_d = np.zeros(wyjscie_ilosc).T
+
+        dct['__init__'] = new_init
+        return super().__new__(cls, name, bases, dct)
+
+
+def optimizer_decorator(function):
+    """
+    Decorator to apply specific optimization logic before or after a function call.
+    """
+    def wrapper(self, *args, **kwargs):
+        if self.optimizer == "adam":
+            print("applying Adam optimization")
+        if self.gradients =="batch":
+            print("applying batch gradient descent")
+        if  self.gradients == "mini-batch":
+            print("applying mini batch gradient descent")
+        elif self.optimizer == "momentum":
+            print("applying Momentum pptimization")
+        else:
+            print("it seems that function uses Stochastic Gradient Descent optimization")
+        print("Model Optimizer Information:")
+        print("Optimizer:".ljust(15) + self.optimizer.ljust(10))
+        print("Gradients:".ljust(15) + self.gradients.ljust(10))
+        print(f"Alpha: {str(self.alfa): ^15}")
+        print("Activation Layer:".ljust(20, " "), str(self.activation_layer).ljust(10," "))
+        print("Weights shape:".ljust(20," "), str(list(self.wagi.shape)).ljust(10," "))
+        print("Biases shape:".ljust(20," "), str(list(self.bias.shape)).ljust(10," "))
+        print("-" * 30)
+        return function(self, *args, **kwargs)
+
+    return wrapper
+
+
+
+
+class LayerFunctions(metaclass=LayerModificationMetaClass):
     __slots__ = ["len_data","wyjscia_ilosc","activation_layer","bias","wagi","alfa","loss","accuracy","Beta","weights_exponential_d","biases_exponential_d","v_weights","v_biases","optimizer","gradients","epsilion","RMSprop"]
     def __init__(self, len_data, wyjscie_ilosc=1,activation_layer=None,optimizer=None,gradients=None ):
-
         self.len_data = len_data
         self.wyjscia_ilosc = wyjscie_ilosc
-
         self.activation_layer = activation_layer
-        self.bias = None
-        self.wagi = None
-        self.alfa = 0.009
-        #self.one_hot_encoded = None
-        # korekta pierwszego rzędu dla 1 parametru momentum
-        self.optimizer =optimizer
-        self.gradients=gradients
-        if self.gradients=="batch" or self.gradients=="mini-batch":
-            self.weights_exponential_d = None
-            self.biases_exponential_d = None
-        if self.optimizer=="momentum":
-            self.Beta =0.9
-            #exponentially weighted averages of derivatives
-            self.v_weights = None
-            self.v_biases = None
-        if self.optimizer=="adagrad":
-            self.epsilion = None
-        if self.optimizer=="adam":
-            self.Beta=0.9
-            self.RMSprop = 0.95
-            self.epsilion = None
+        self.optimizer = optimizer
+        self.gradients = gradients
 
     def train_forward(self, point):
         """
@@ -132,7 +169,7 @@ class LayerFunctions:
 
         if self.activation_layer == "elu":
             alpha = self.alfa
-            return np.where(y_pred >= 0, 1, alpha * np.exp(y_pred))
+            return np.where(y_pred >= 0, y_pred, -alpha * np.exp(y_pred))
 
         if self.activation_layer == "relu":
             return np.where(y_pred >= 0, y_pred, 0)
@@ -146,29 +183,36 @@ class LayerFunctions:
         self.random_alfa(alfa)
         self.random_bias()
         self.random_weights()
-        if self.gradients == "batch" or self.gradients == "mini-batch":
-            self.weights_exponential_d = np.zeros_like(self.wagi)
-            self.biases_exponential_d = np.zeros_like(self.bias)
-        if self.optimizer == "momentum":
-            self.v_weights = np.zeros_like(self.wagi)
-            self.v_biases = np.zeros_like(self.bias)
-        if self.optimizer=="adagrad":
-            self.epsilion= 1e-9
+        # if self.gradients == "batch" or self.gradients == "mini-batch":
+        #     self.weights_exponential_d = np.zeros_like(self.wagi)
+        #     self.biases_exponential_d = np.zeros_like(self.bias)
+        # if self.optimizer == "momentum":
+        #     self.v_weights = np.zeros_like(self.wagi)
+        #     self.v_biases = np.zeros_like(self.bias)
+        # if self.optimizer=="adagrad":
+        #     self.epsilion= 1e-9
 
         return self.alfa[0]
 
 
     def random_weights(self):
-        self.wagi = np.random.rand( self.len_data,self.wyjscia_ilosc).T*random.choice([0.2,-0.3,-0.2,0.3])
+        self.wagi = np.random.rand( self.len_data,self.wyjscia_ilosc).T*random.choice([-0.2,0.2])
     def random_bias(self):
-        self.bias = np.random.rand(self.wyjscia_ilosc).T*random.choice([0.1,-0.1,-0.2,0.2])
+        self.bias = np.random.rand(self.wyjscia_ilosc).T*random.choice([0.3,-0.3,-0.2,0.2])
     def random_alfa(self,a=None):
         if a!=None:
             self.alfa = np.array([a])
         else:
             x =round(random.random() * 0.65, 3)
             self.alfa = np.array([round(x if x<=0.2 and x>=0.09  else x+0.05 if x<=0.09 else x-0.2,4) ])
+
+    @optimizer_decorator
     def return_params(self):
-        return {"wagi":self.wagi,"bias":self.bias,"activation":self.activation_layer}
-    def load_params(self):
-        pass
+        """
+        Returns model parameters.
+        """
+        return {
+            "wagi": self.wagi,
+            "bias": self.bias,
+            "activation": self.activation_layer
+        }

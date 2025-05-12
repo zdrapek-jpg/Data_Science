@@ -1,5 +1,8 @@
 # Tu Będzie zbudowana sieć neuronowa która edzie miałą warstwy złożone z One_Layer
 import json
+
+import numpy as np
+
 from NeuralNetwork.One_Layer import LayerFunctions
 
 class NNetwork():
@@ -11,9 +14,11 @@ class NNetwork():
             self.epoki = 2
         #Przechowanie warstw jako lista oraz utrzymanie struktury sieci jako listy
 
-        self.LineOne = LayerFunctions(len_data=31,wyjscie_ilosc=12,activation_layer="relu")
+        self.LineOne = LayerFunctions(len_data=31,wyjscie_ilosc=12,activation_layer="elu")
         self.LineTwo = LayerFunctions(len_data=12,wyjscie_ilosc=12,activation_layer="elu")
         self.LineThree = LayerFunctions(len_data=12,wyjscie_ilosc=1,activation_layer="sigmoid")
+
+
         self.LineOne.start(self.alpha)
         self.LineTwo.start(self.alpha)
         self.LineThree.start(self.alpha)
@@ -89,6 +94,7 @@ class NNetwork():
         predictions = []
         error = 0
         for  point, y_point in zip(x_test, y_test):
+            #print(type(point),point.shape)
             output = self.LineOne.train_forward(point)
             output2 = self.LineTwo.train_forward(output)
             output3 = self.LineThree.train_forward(output2)
@@ -100,10 +106,19 @@ class NNetwork():
         return (sum([1 if y_pred == y_origin else 0 for y_pred, y_origin in zip(predictions, y_test)]) / len(y_test)),strata
 
     def pred(self,point):
-        point  =point.T
+        # Tile the `point` to match the 12 neurons
+        # Shape becomes (12, 31), repeating the input 12 times
+
+
+        print(f"Input to Layer 1: {point.shape}")
         output = self.LineOne.train_forward(point)
+        print(f"Output from Layer 1: {output.shape}")
+
         output2 = self.LineTwo.train_forward(output)
-        output3 = self.LineThree.train_forward(output2.T)
+        print(f"Output from Layer 2: {output2.shape}")
+
+        output3 = self.LineThree.train_forward(output2)
+        print(f"Output from Layer 3: {output3.shape}")
         return output3
 
 
@@ -130,7 +145,7 @@ class NNetwork():
         # Save to JSON file
         with open(file, "w") as model_file:
             json.dump(model_data, model_file,indent=2)
-            print("model saved")
+            #print("model saved")
 
 
 

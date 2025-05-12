@@ -4,9 +4,7 @@ from Data.One_hot_Encoder import OneHotEncoder
 import numpy as np
 import pandas as pd
 import sys
-from NeuralNetwork.Network_single_class import NNetwork
-import os 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+import os
 
 
 
@@ -35,7 +33,7 @@ def modify_user_input_for_network(data, klucze=['Surname', 'CreditScore',
     for_one_hot = merged_data.iloc[:,col1one_hot].values.tolist()
 
 
-    from Transformers import StandardizationType, Transformations
+    from Data.Transformers import StandardizationType, Transformations
     # std zawiera informacje które są wykorzystywane przy transformacji punktu
     std = Transformations.load_data()
     #print(type(std),print(std.srednie))
@@ -71,30 +69,39 @@ from json import loads, dumps
 from flask import Flask, request, jsonify
 from NeuralNetwork.Network_single_class import NNetwork
 
+# user_data = ["Henryk", 619, "France", "Female", 2, 1, 1, 101348.88, 58, "management", "married", "tertiary", 6429, "no"]
+# ready_for_model = modify_user_input_for_network(user_data)
+# print(ready_for_model[0])
+# model_instance = NNetwork.create_instance()
+# prediction = model_instance.pred(ready_for_model)
+# print(prediction)
 
 app = Flask(__name__)
-import request
 # Post
-@app.route('/',methods=["POST"])
+@app.route('/')
 def predict():
     try:
-        user_data = request.get_json()
-        user_data = user_data["user_data"]
+        #user_data = request.get_json()
+        #user_data = user_data["user_data"]
+
+        user_data = ["Henryk", 619, "France", "Female", 2, 1, 1, 101348.88, 58, "management", "married", "tertiary",
+                     6429, "no"]
+
         if not user_data:
-            return  jsonify("Data is empty ")
-        if len(user_data)!=14:
-            return jsonify(f"data is different langth than expected {len(user_data)}!=14")
-        user_data = ["Henryk", 619, "France", "Female", 2, 1, 1, 101348.88, 58, "management", "married", "tertiary", 6429,
-                     "no"]
+            return "Data is empty"
+        if len(user_data) != 14:
+            return f"Data is different length than expected {len(user_data)} != 14"
+        user_data = ["Henryk", 619, "France", "Female", 2, 1, 1, 101348.88, 58, "management", "married", "tertiary", 6429, "no"]
         ready_for_model = modify_user_input_for_network(user_data)
+
         model_instance = NNetwork.create_instance()
-        prediction = model_instance.pred(ready_for_model)
-        return prediction[0]
+        prediction = model_instance.pred(ready_for_model[0])
+        print(prediction)
+        return str(prediction[0])
     except Exception as e:
-        return jsonify({"error":"error with "+str(e)},500)
-
-
-
+        return f"<h1>Error: {str(e)}</h1>", 500
+#
+#
 if __name__ == "__main__":
     app.run(debug=True)
 
