@@ -3,17 +3,13 @@ import random
 
 
 class LayerModificationMetaClass(type):
-    """
-    Purpose of this class is to add attributes and their values especially for
-    create fields
-    """
+    """Purpose of this class is to add attributes and their values especially for
+    create fields"""
     def __new__(cls, name, bases, dct):
         original_init = dct.get('__init__')
-
         def new_init(self, len_data, wyjscie_ilosc=1, activation_layer=None, optimizer=None, gradients=None):
             original_init(self, len_data, wyjscie_ilosc, activation_layer, optimizer, gradients)
-
-            # Dynamic initialization based on optimizer
+            # initialization based on optimizer
             if self.optimizer in ["momentum", "adam"]:
                 self.v_weights = np.zeros((len_data,wyjscie_ilosc)).T
                 self.v_biases =     np.zeros(wyjscie_ilosc).T
@@ -47,9 +43,13 @@ def optimizer_decorator(function):
         else:
             print("it seems that function uses Stochastic Gradient Descent optimization")
         print("Model Optimizer Information:")
-        print("Optimizer:".ljust(15) + self.optimizer.ljust(10))
-        print("Gradients:".ljust(15) + self.gradients.ljust(10))
-        print(f"Alpha: {str(self.alfa): ^15}")
+        try:
+            print("Optimizer:".ljust(15) + self.optimizer.ljust(10))
+            print("Gradients:".ljust(15) + self.gradients.ljust(10))
+            print(f"Alpha: {str(self.alfa): ^15}")
+        except:
+            pass
+
         print("Activation Layer:".ljust(20, " "), str(self.activation_layer).ljust(10," "))
         print("Weights shape:".ljust(20," "), str(list(self.wagi.shape)).ljust(10," "))
         print("Biases shape:".ljust(20," "), str(list(self.bias.shape)).ljust(10," "))

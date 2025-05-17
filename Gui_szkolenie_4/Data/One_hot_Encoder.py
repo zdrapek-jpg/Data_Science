@@ -35,7 +35,7 @@ class OneHotEncoder:
                                       "number_of_coded_keys":self.number_of_coded_keys
                                       }
 
-    def new_label_encoder_keys(self,data,orders:list):
+    def label_encoder_keys(self,data,orders:list):
         """
             :argument data in pd.DataFrame! to transform
             :argument orders list of list that contain order of label encoder
@@ -96,7 +96,6 @@ class OneHotEncoder:
                 new_one_hot_instance = cls()
                 new_one_hot_instance.data_code = data
                 return new_one_hot_instance
-
         except FileNotFoundError:
             print(f"File not found: {path}")
         except json.JSONDecodeError:

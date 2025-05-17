@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, RIGHT, Y, VERTICAL
 from Data.load_user_data import modify_user_input_for_network
-from NeuralNetwork.Network_single_class import NNetwork
+from NeuralNetwork.Network_single_class1 import NNetwork
 from Data.One_hot_Encoder import OneHotEncoder
 from Data.Transformers import Transformations
 import threading
@@ -16,6 +16,7 @@ def load():
     normalization_instance = Transformations.load_data()  # Load the transformation data
     one_hot_instance = OneHotEncoder.load_data()  # Load one-hot encoding data
     model_instance = NNetwork.create_instance()  # Create the model instance
+    print(normalization_instance.std_type)
     print("Data loaded successfully!")
 
 
@@ -160,7 +161,9 @@ def app():
             float(entries['EstimatedSalary'].get()),
             'yes' if loan_var.get() == 1 else 'no'
         ]
+        print("input: ")
         print(user_data)
+        print()
         return user_data
 
     # Function to handle the submit button click (prediction)

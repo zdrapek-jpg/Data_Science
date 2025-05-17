@@ -12,7 +12,7 @@ from Data.Decorator_time_logging import log_execution_time
 def modify_user_input_for_network(data,one_hot_instance=None,standarization_instance=None, klucze=['Surname', 'CreditScore',
                                           'Country', 'Gender', 'Tenure', 'HasCrCard',
                                           'IsActiveMember', 'EstimatedSalary', 'age', 'job',
-                                          'marital','education', 'balance', 'loan',],):
+                                          'marital','education', 'balance', 'loan',],col2_norm=None,col1one_hot=None):
 ## ['CreditScore', 'Country', 'Gender', 'Tenure', 'HasCrCard','IsActiveMember',
 # 'EstimatedSalary', 'age', 'job', 'marital','education', 'balance', 'loan']
     merged_data = pd.DataFrame(
@@ -20,41 +20,34 @@ def modify_user_input_for_network(data,one_hot_instance=None,standarization_inst
         columns=klucze
     )
     merged_data["loan"] = np.where(merged_data["loan"] == "yes", 1, 0)
-
-
     merged_data["HasCrCard"] = pd.to_numeric(merged_data.loc[:, "HasCrCard"])
     merged_data["Gender"] = np.where(merged_data["Gender"] == "Male", 1, 0)
+
     col1one_hot = [2, 9, 10, 11]
     # kolumna za pomocą normalizacji danych
     col2_norm = [1, 4, 6, 7, 8, 12]
     # kolumna index 2,12 jest pod numeric
     # kolumna za pomocą normalizacji danych
-
     for_normalization = merged_data.iloc[:,col2_norm]
     for_one_hot = merged_data.iloc[:,col1one_hot]
-
-
-
     normalized = standarization_instance.standarization_one_point(for_normalization.values.tolist()[0])
     normalized = pd.DataFrame([normalized],columns=merged_data.columns[col2_norm].tolist())
-    #print(for_normalization_input_obj)
-
-
     data_as_1_row = pd.DataFrame()
-
-one_hot_instance.load_data()
     data_one_hot = one_hot_instance.code_y_for_network(for_one_hot)
-
     data_as_1_row=data_one_hot
-
-
     data_as_1_row["HasCrCard"] = merged_data["HasCrCard"].values
     data_as_1_row["loan"] = merged_data["loan"].values
     data_as_1_row["Gender"] = merged_data["Gender"].values
     data_as_1_row = pd.concat((data_as_1_row, normalized),axis=1)
-
-    print(data_as_1_row)
+    data_as_1_row
+    for k in data_as_1_row.keys():
+        print(k,end=" ")
+    print()
+    for valu in data_as_1_row.values.tolist():
+        print(valu,end=" ")
+    print()
     return data_as_1_row.values
+
 #
 # from json import loads, dumps
 # from flask import Flask, request, jsonify

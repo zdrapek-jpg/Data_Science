@@ -3,6 +3,7 @@ import json
 from Data.SPLIT_test_valid_train import SplitData
 from NeuralNetwork.One_Layer import LayerFunctions
 from Data.Decorator_time_logging import log_execution_time
+from numpy import array
 class NNetwork():
     __slots__ = ["epoki","alpha","_Network","loss","train_accuracy","valid_accuracy", "valid_loss","optimizer","gradients"]
     def __init__(self,w=None,epoki=None,alpha=0.02,optimizer=None,gradients=None):
@@ -25,6 +26,8 @@ class NNetwork():
         # instancja klasy warstwy
         instance_of_layer = LayerFunctions(len_data= inputs,wyjscie_ilosc= outputs,activation_layer=activation_layer_name,optimizer=self.optimizer,gradients=self.gradients)
         instance_of_layer.start(self.alpha)
+        instance_of_layer.optimizer=self.optimizer
+        instance_of_layer.gradients=self.gradients
 
 
         if len(self._Network)>=1:
@@ -226,14 +229,9 @@ class NNetwork():
 
     @classmethod
     def create_instance(cls,path=r"C:\Program Files\Pulpit\Data_science\Gui_szkolenie_4\TrainData\model.json"):
-        import json
-        from numpy import array
-
         with open(path, "r") as model_read:
             data = json.load(model_read)
-
         instance = cls()
-
         # Wyczyszczenie listy warstw jeśli istnieje
         instance._Network = []
 

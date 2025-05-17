@@ -1,5 +1,5 @@
 def show_training_process(train_acc: list, train_loss: list, valid_acc: list, valid_loss: list, test_acc: float,
-                          test_loss: float):
+                          test_loss: float, index:int  = 1):
     """
     Visualizes the training, validation, and test performance of a neural network over training epochs.
 
@@ -46,5 +46,5 @@ def show_training_process(train_acc: list, train_loss: list, valid_acc: list, va
     lines2, labels2 = ax2.get_legend_handles_labels()
     ax1.legend(lines + lines2, labels + labels2, loc='upper right')
 
-    plt.title("Loss and Accuracy over Epochs")
+    plt.title(f"Loss and Accuracy over Epochs {index}")
     plt.show()
