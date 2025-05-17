@@ -1,0 +1,350 @@
+21:26:12 - Executed function: modify_user_input_for_network in: 0.03 seconds
+21:26:12 - Data processing failed. norm: <class 'NoneType'>,one hot: <class 'NoneType'> Exiting...
+21:36:47 - Executed function: modify_user_input_for_network in: 0.01 seconds
+21:36:47 - Executed function: process_standarization in: 0.14 seconds
+21:36:49 - Executed function: process_one_hot_encoder in: 1.76 seconds
+21:36:49 - Data preprocessing completed. Dataset shape: (1001, 32)
+21:38:48 - Executed function: modify_user_input_for_network in: 0.01 seconds
+21:38:48 - Executed function: process_standarization in: 0.09 seconds
+21:38:50 - Executed function: process_one_hot_encoder in: 1.79 seconds
+21:38:50 - Data preprocessing completed. Dataset shape: (1001, 32)
+21:39:25 - Executed function: training in: 35.49 seconds
+21:39:25 - Executed function: modify_user_input_for_network in: 0.01 seconds
+11:54:23 - Executed function: modify_user_input_for_network in: 0.10 seconds
+11:54:39 - Executed function: modify_user_input_for_network in: 0.07 seconds
+11:54:51 - Executed function: modify_user_input_for_network in: 0.04 seconds
+11:54:58 - Executed function: modify_user_input_for_network in: 0.06 seconds
+11:57:15 - Executed function: modify_user_input_for_network in: 0.05 seconds
+11:57:21 - Executed function: modify_user_input_for_network in: 0.07 seconds
+11:57:26 - Executed function: modify_user_input_for_network in: 0.07 seconds
+11:57:33 - Executed function: modify_user_input_for_network in: 0.07 seconds
+11:57:40 - Executed function: modify_user_input_for_network in: 0.06 seconds
+11:57:43 - Executed function: modify_user_input_for_network in: 0.07 seconds
+11:57:45 - Executed function: modify_user_input_for_network in: 0.06 seconds
+11:57:54 - Executed function: modify_user_input_for_network in: 0.06 seconds
+11:57:57 - Executed function: modify_user_input_for_network in: 0.07 seconds
+11:58:00 - Executed function: modify_user_input_for_network in: 0.06 seconds
+12:03:52 - Executed function: modify_user_input_for_network in: 0.05 seconds
+12:04:01 - Executed function: modify_user_input_for_network in: 0.06 seconds
+12:04:07 - Executed function: modify_user_input_for_network in: 0.07 seconds
+12:04:15 - Executed function: modify_user_input_for_network in: 0.07 seconds
+12:04:19 - Executed function: modify_user_input_for_network in: 0.07 seconds
+12:04:23 - Executed function: modify_user_input_for_network in: 0.06 seconds
+12:04:28 - Executed function: modify_user_input_for_network in: 0.04 seconds
+12:04:30 - Executed function: modify_user_input_for_network in: 0.04 seconds
+12:04:35 - Executed function: modify_user_input_for_network in: 0.04 seconds
+12:04:40 - Executed function: modify_user_input_for_network in: 0.04 seconds
+12:04:47 - Executed function: modify_user_input_for_network in: 0.06 seconds
+12:04:53 - Executed function: modify_user_input_for_network in: 0.06 seconds
+12:04:57 - Executed function: modify_user_input_for_network in: 0.06 seconds
+12:05:01 - Executed function: modify_user_input_for_network in: 0.06 seconds
+12:05:04 - Executed function: modify_user_input_for_network in: 0.07 seconds
+12:05:07 - Executed function: modify_user_input_for_network in: 0.07 seconds
+12:05:11 - Executed function: modify_user_input_for_network in: 0.06 seconds
+12:05:14 - Executed function: modify_user_input_for_network in: 0.07 seconds
+12:05:19 - Executed function: modify_user_input_for_network in: 0.07 seconds
+12:05:23 - Executed function: modify_user_input_for_network in: 0.06 seconds
+12:05:26 - Executed function: modify_user_input_for_network in: 0.06 seconds
+12:05:30 - Executed function: modify_user_input_for_network in: 0.04 seconds
+12:16:19 - Executed function: modify_user_input_for_network in: 0.07 seconds
+12:16:31 - Executed function: modify_user_input_for_network in: 0.06 seconds
+12:16:33 - Executed function: modify_user_input_for_network in: 0.06 seconds
+12:16:39 - Executed function: modify_user_input_for_network in: 0.07 seconds
+12:16:47 - Executed function: modify_user_input_for_network in: 0.07 seconds
+12:16:50 - Executed function: modify_user_input_for_network in: 0.07 seconds
+12:16:59 - Executed function: modify_user_input_for_network in: 0.04 seconds
+12:17:11 - Executed function: modify_user_input_for_network in: 0.06 seconds
+12:17:19 - Executed function: modify_user_input_for_network in: 0.07 seconds
+12:17:29 - Executed function: modify_user_input_for_network in: 0.07 seconds
+12:17:41 - Executed function: modify_user_input_for_network in: 0.06 seconds
+12:20:31 - Executed function: modify_user_input_for_network in: 0.07 seconds
+12:20:36 - Executed function: modify_user_input_for_network in: 0.07 seconds
+12:20:38 - Executed function: modify_user_input_for_network in: 0.07 seconds
+12:20:43 - Executed function: modify_user_input_for_network in: 0.07 seconds
+12:20:50 - Executed function: modify_user_input_for_network in: 0.06 seconds
+12:20:57 - Executed function: modify_user_input_for_network in: 0.07 seconds
+12:21:01 - Executed function: modify_user_input_for_network in: 0.06 seconds
+12:21:04 - Executed function: modify_user_input_for_network in: 0.06 seconds
+12:21:10 - Executed function: modify_user_input_for_network in: 0.06 seconds
+12:21:13 - Executed function: modify_user_input_for_network in: 0.06 seconds
+12:21:16 - Executed function: modify_user_input_for_network in: 0.06 seconds
+12:21:24 - Executed function: modify_user_input_for_network in: 0.07 seconds
+12:21:35 - Executed function: modify_user_input_for_network in: 0.06 seconds
+12:21:44 - Executed function: modify_user_input_for_network in: 0.07 seconds
+12:21:50 - Executed function: modify_user_input_for_network in: 0.07 seconds
+12:21:56 - Executed function: modify_user_input_for_network in: 0.07 seconds
+12:21:59 - Executed function: modify_user_input_for_network in: 0.07 seconds
+12:22:02 - Executed function: modify_user_input_for_network in: 0.06 seconds
+12:22:04 - Executed function: modify_user_input_for_network in: 0.07 seconds
+12:22:07 - Executed function: modify_user_input_for_network in: 0.04 seconds
+12:22:09 - Executed function: modify_user_input_for_network in: 0.04 seconds
+12:22:12 - Executed function: modify_user_input_for_network in: 0.05 seconds
+12:22:15 - Executed function: modify_user_input_for_network in: 0.04 seconds
+12:22:19 - Executed function: modify_user_input_for_network in: 0.04 seconds
+12:22:24 - Executed function: modify_user_input_for_network in: 0.07 seconds
+12:22:29 - Executed function: modify_user_input_for_network in: 0.07 seconds
+12:22:39 - Executed function: modify_user_input_for_network in: 0.06 seconds
+12:22:42 - Executed function: modify_user_input_for_network in: 0.07 seconds
+12:22:46 - Executed function: modify_user_input_for_network in: 0.06 seconds
+12:22:51 - Executed function: modify_user_input_for_network in: 0.07 seconds
+12:22:55 - Executed function: modify_user_input_for_network in: 0.06 seconds
+12:22:59 - Executed function: modify_user_input_for_network in: 0.06 seconds
+12:23:03 - Executed function: modify_user_input_for_network in: 0.03 seconds
+12:23:09 - Executed function: modify_user_input_for_network in: 0.07 seconds
+12:23:17 - Executed function: modify_user_input_for_network in: 0.07 seconds
+12:23:36 - Executed function: process_standarization in: 0.15 seconds
+12:23:38 - Executed function: process_one_hot_encoder in: 2.38 seconds
+12:23:38 - Data preprocessing completed. Dataset shape: (1001, 32)
+12:24:29 - Executed function: training in: 50.53 seconds
+12:32:17 - Executed function: process_standarization in: 0.17 seconds
+12:32:20 - Executed function: process_one_hot_encoder in: 2.39 seconds
+12:32:20 - Data preprocessing completed. Dataset shape: (1001, 32)
+12:32:49 - Executed function: process_standarization in: 0.22 seconds
+12:32:51 - Executed function: process_one_hot_encoder in: 2.32 seconds
+12:32:51 - Data preprocessing completed. Dataset shape: (1001, 32)
+12:33:52 - Executed function: process_standarization in: 0.19 seconds
+12:33:55 - Executed function: process_one_hot_encoder in: 2.34 seconds
+12:33:55 - Data preprocessing completed. Dataset shape: (1001, 32)
+12:37:17 - Executed function: training in: 3.37 minutes
+12:37:25 - Executed function: process_standarization in: 0.16 seconds
+12:37:27 - Executed function: process_one_hot_encoder in: 1.79 seconds
+12:37:27 - Data preprocessing completed. Dataset shape: (1001, 32)
+12:38:07 - Executed function: process_standarization in: 0.18 seconds
+12:38:09 - Executed function: process_one_hot_encoder in: 1.81 seconds
+12:38:09 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:10:00 - Executed function: modify_user_input_for_network in: 0.04 seconds
+15:10:05 - Executed function: modify_user_input_for_network in: 0.03 seconds
+15:10:09 - Executed function: modify_user_input_for_network in: 0.03 seconds
+15:10:15 - Executed function: modify_user_input_for_network in: 0.03 seconds
+15:10:21 - Executed function: modify_user_input_for_network in: 0.03 seconds
+15:10:28 - Executed function: modify_user_input_for_network in: 0.03 seconds
+15:10:33 - Executed function: modify_user_input_for_network in: 0.03 seconds
+15:10:38 - Executed function: modify_user_input_for_network in: 0.03 seconds
+15:10:45 - Executed function: modify_user_input_for_network in: 0.03 seconds
+15:10:50 - Executed function: modify_user_input_for_network in: 0.03 seconds
+15:10:54 - Executed function: modify_user_input_for_network in: 0.03 seconds
+15:10:58 - Executed function: modify_user_input_for_network in: 0.03 seconds
+15:11:09 - Executed function: modify_user_input_for_network in: 0.03 seconds
+15:11:18 - Executed function: modify_user_input_for_network in: 0.03 seconds
+15:11:23 - Executed function: modify_user_input_for_network in: 0.03 seconds
+15:11:32 - Executed function: modify_user_input_for_network in: 0.03 seconds
+15:11:36 - Executed function: modify_user_input_for_network in: 0.03 seconds
+15:11:46 - Executed function: modify_user_input_for_network in: 0.03 seconds
+15:11:55 - Executed function: modify_user_input_for_network in: 0.03 seconds
+15:12:06 - Executed function: modify_user_input_for_network in: 0.03 seconds
+15:12:10 - Executed function: modify_user_input_for_network in: 0.03 seconds
+15:12:13 - Executed function: modify_user_input_for_network in: 0.03 seconds
+15:12:18 - Executed function: modify_user_input_for_network in: 0.03 seconds
+15:12:25 - Executed function: modify_user_input_for_network in: 0.03 seconds
+15:12:34 - Executed function: modify_user_input_for_network in: 0.02 seconds
+15:12:41 - Executed function: modify_user_input_for_network in: 0.03 seconds
+15:12:48 - Executed function: modify_user_input_for_network in: 0.03 seconds
+15:12:54 - Executed function: modify_user_input_for_network in: 0.03 seconds
+15:12:58 - Executed function: modify_user_input_for_network in: 0.03 seconds
+15:13:37 - Executed function: modify_user_input_for_network in: 0.03 seconds
+15:13:53 - Executed function: modify_user_input_for_network in: 0.03 seconds
+15:14:00 - Executed function: modify_user_input_for_network in: 0.03 seconds
+15:14:06 - Executed function: modify_user_input_for_network in: 0.02 seconds
+15:14:10 - Executed function: modify_user_input_for_network in: 0.03 seconds
+15:14:12 - Executed function: modify_user_input_for_network in: 0.03 seconds
+15:14:17 - Executed function: modify_user_input_for_network in: 0.03 seconds
+15:14:23 - Executed function: modify_user_input_for_network in: 0.03 seconds
+15:14:26 - Executed function: modify_user_input_for_network in: 0.03 seconds
+19:14:06 - Executed function: modify_user_input_for_network in: 0.05 seconds
+19:14:11 - Executed function: modify_user_input_for_network in: 0.04 seconds
+19:14:31 - Executed function: modify_user_input_for_network in: 0.03 seconds
+19:14:36 - Executed function: modify_user_input_for_network in: 0.03 seconds
+19:14:38 - Executed function: modify_user_input_for_network in: 0.04 seconds
+19:14:41 - Executed function: modify_user_input_for_network in: 0.04 seconds
+19:14:44 - Executed function: modify_user_input_for_network in: 0.03 seconds
+19:14:48 - Executed function: modify_user_input_for_network in: 0.04 seconds
+19:14:55 - Executed function: modify_user_input_for_network in: 0.04 seconds
+19:15:00 - Executed function: modify_user_input_for_network in: 0.03 seconds
+19:15:06 - Executed function: modify_user_input_for_network in: 0.04 seconds
+19:37:14 - Executed function: modify_user_input_for_network in: 0.04 seconds
+19:37:21 - Executed function: modify_user_input_for_network in: 0.03 seconds
+19:37:28 - Executed function: modify_user_input_for_network in: 0.04 seconds
+19:37:32 - Executed function: modify_user_input_for_network in: 0.04 seconds
+19:37:40 - Executed function: modify_user_input_for_network in: 0.04 seconds
+19:37:46 - Executed function: modify_user_input_for_network in: 0.03 seconds
+19:37:54 - Executed function: modify_user_input_for_network in: 0.03 seconds
+19:38:01 - Executed function: modify_user_input_for_network in: 0.04 seconds
+19:38:04 - Executed function: modify_user_input_for_network in: 0.04 seconds
+19:38:07 - Executed function: modify_user_input_for_network in: 0.03 seconds
+19:38:12 - Executed function: modify_user_input_for_network in: 0.03 seconds
+19:38:20 - Executed function: modify_user_input_for_network in: 0.03 seconds
+19:39:23 - Executed function: modify_user_input_for_network in: 0.03 seconds
+19:39:33 - Executed function: modify_user_input_for_network in: 0.03 seconds
+19:39:38 - Executed function: modify_user_input_for_network in: 0.03 seconds
+19:39:42 - Executed function: modify_user_input_for_network in: 0.03 seconds
+19:39:47 - Executed function: modify_user_input_for_network in: 0.03 seconds
+19:39:51 - Executed function: modify_user_input_for_network in: 0.03 seconds
+19:39:57 - Executed function: modify_user_input_for_network in: 0.04 seconds
+19:40:31 - Executed function: process_standarization in: 0.17 seconds
+19:40:33 - Executed function: process_one_hot_encoder in: 1.85 seconds
+19:40:33 - Data preprocessing completed. Dataset shape: (1001, 32)
+20:05:03 - Executed function: process_standarization in: 0.20 seconds
+20:05:04 - Executed function: process_one_hot_encoder in: 1.86 seconds
+20:05:04 - Data preprocessing completed. Dataset shape: (1001, 32)
+20:05:32 - Executed function: process_standarization in: 0.25 seconds
+20:05:33 - Executed function: process_one_hot_encoder in: 1.91 seconds
+20:05:33 - Data preprocessing completed. Dataset shape: (1001, 32)
+20:05:34 - Executed function: process_standarization in: 0.09 seconds
+20:05:36 - Executed function: process_one_hot_encoder in: 1.81 seconds
+20:05:36 - Data preprocessing completed. Dataset shape: (1001, 32)
+20:06:50 - Executed function: process_standarization in: 0.21 seconds
+20:06:52 - Executed function: process_one_hot_encoder in: 2.04 seconds
+20:06:52 - Data preprocessing completed. Dataset shape: (1001, 32)
+20:06:53 - Executed function: process_standarization in: 0.14 seconds
+20:06:55 - Executed function: process_one_hot_encoder in: 1.90 seconds
+20:06:55 - Data preprocessing completed. Dataset shape: (1001, 32)
+20:07:03 - Executed function: process_standarization in: 0.03 seconds
+20:07:04 - Executed function: process_one_hot_encoder in: 1.80 seconds
+20:07:04 - Data preprocessing completed. Dataset shape: (1001, 32)
+20:07:05 - Executed function: process_standarization in: 0.11 seconds
+20:07:06 - Executed function: process_one_hot_encoder in: 1.80 seconds
+20:07:06 - Data preprocessing completed. Dataset shape: (1001, 32)
+20:07:26 - Executed function: process_standarization in: 0.08 seconds
+20:07:27 - Executed function: process_one_hot_encoder in: 1.85 seconds
+20:07:27 - Data preprocessing completed. Dataset shape: (1001, 32)
+20:07:28 - Executed function: process_standarization in: 0.07 seconds
+20:07:30 - Executed function: process_one_hot_encoder in: 1.81 seconds
+20:07:30 - Data preprocessing completed. Dataset shape: (1001, 32)
+20:10:07 - Executed function: process_standarization in: 0.06 seconds
+20:10:09 - Executed function: process_one_hot_encoder in: 1.87 seconds
+20:10:09 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:32:13 - Executed function: process_standarization in: 0.21 seconds
+15:32:15 - Executed function: process_one_hot_encoder in: 1.75 seconds
+15:32:15 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:32:48 - Executed function: process_standarization in: 0.14 seconds
+15:32:50 - Executed function: process_one_hot_encoder in: 1.78 seconds
+15:32:50 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:38:54 - Executed function: process_standarization in: 0.24 seconds
+15:38:55 - Executed function: process_one_hot_encoder in: 1.78 seconds
+15:38:55 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:39:04 - Executed function: process_standarization in: 0.20 seconds
+15:39:05 - Executed function: process_one_hot_encoder in: 1.76 seconds
+15:39:05 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:39:11 - Executed function: process_standarization in: 0.20 seconds
+15:39:12 - Executed function: process_one_hot_encoder in: 1.76 seconds
+15:39:12 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:39:24 - Executed function: process_standarization in: 0.24 seconds
+15:39:25 - Executed function: process_one_hot_encoder in: 1.76 seconds
+15:39:25 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:39:43 - Executed function: process_standarization in: 0.26 seconds
+15:39:44 - Executed function: process_one_hot_encoder in: 1.79 seconds
+15:39:44 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:41:05 - Executed function: process_standarization in: 0.24 seconds
+15:41:06 - Executed function: process_one_hot_encoder in: 1.83 seconds
+15:41:06 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:41:06 - Executed function: process_standarization in: 0.17 seconds
+15:41:08 - Executed function: process_one_hot_encoder in: 1.83 seconds
+15:41:08 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:41:17 - Executed function: training in: 8.69 seconds
+15:43:29 - Executed function: process_standarization in: 0.17 seconds
+15:43:31 - Executed function: process_one_hot_encoder in: 1.79 seconds
+15:43:31 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:43:31 - Executed function: process_standarization in: 0.19 seconds
+15:43:33 - Executed function: process_one_hot_encoder in: 1.78 seconds
+15:43:33 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:44:24 - Executed function: process_standarization in: 0.16 seconds
+15:44:25 - Executed function: process_one_hot_encoder in: 1.81 seconds
+15:44:25 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:44:25 - Executed function: process_standarization in: 0.06 seconds
+15:44:27 - Executed function: process_one_hot_encoder in: 1.69 seconds
+15:44:27 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:44:38 - Executed function: process_standarization in: 0.16 seconds
+15:44:40 - Executed function: process_one_hot_encoder in: 1.82 seconds
+15:44:40 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:44:40 - Executed function: process_standarization in: 0.09 seconds
+15:44:42 - Executed function: process_one_hot_encoder in: 1.82 seconds
+15:44:42 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:44:57 - Executed function: training in: 14.89 seconds
+15:45:18 - Executed function: process_standarization in: 0.20 seconds
+15:45:20 - Executed function: process_one_hot_encoder in: 1.76 seconds
+15:45:20 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:45:20 - Executed function: process_standarization in: 0.04 seconds
+15:45:21 - Executed function: process_one_hot_encoder in: 1.68 seconds
+15:45:21 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:46:00 - Executed function: process_standarization in: 0.11 seconds
+15:46:02 - Executed function: process_one_hot_encoder in: 1.77 seconds
+15:46:02 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:46:15 - Executed function: process_standarization in: 0.10 seconds
+15:46:16 - Executed function: process_one_hot_encoder in: 1.78 seconds
+15:46:16 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:46:20 - Executed function: process_standarization in: 0.08 seconds
+15:46:22 - Executed function: process_one_hot_encoder in: 1.75 seconds
+15:46:22 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:46:25 - Executed function: process_standarization in: 0.10 seconds
+15:46:27 - Executed function: process_one_hot_encoder in: 1.75 seconds
+15:46:27 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:47:16 - Executed function: process_standarization in: 0.20 seconds
+15:47:18 - Executed function: process_one_hot_encoder in: 1.76 seconds
+15:47:18 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:47:22 - Executed function: process_standarization in: 0.20 seconds
+15:47:23 - Executed function: process_one_hot_encoder in: 1.74 seconds
+15:47:23 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:47:28 - Executed function: process_standarization in: 0.18 seconds
+15:47:30 - Executed function: process_one_hot_encoder in: 1.75 seconds
+15:47:30 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:47:44 - Executed function: training in: 14.15 seconds
+15:48:29 - Executed function: process_standarization in: 0.06 seconds
+15:48:31 - Executed function: process_one_hot_encoder in: 1.76 seconds
+15:48:31 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:48:48 - Executed function: training in: 17.54 seconds
+15:49:30 - Executed function: process_standarization in: 0.25 seconds
+15:49:31 - Executed function: process_one_hot_encoder in: 1.77 seconds
+15:49:31 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:49:46 - Executed function: training in: 14.60 seconds
+15:49:49 - Executed function: process_standarization in: 0.15 seconds
+15:49:50 - Executed function: process_one_hot_encoder in: 1.73 seconds
+15:49:50 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:50:05 - Executed function: training in: 14.38 seconds
+15:50:23 - Executed function: process_standarization in: 0.15 seconds
+15:50:25 - Executed function: process_one_hot_encoder in: 1.79 seconds
+15:50:25 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:52:09 - Executed function: process_standarization in: 0.22 seconds
+15:52:11 - Executed function: process_one_hot_encoder in: 1.78 seconds
+15:52:11 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:52:21 - Executed function: training in: 10.63 seconds
+15:52:37 - Executed function: process_standarization in: 0.15 seconds
+15:52:39 - Executed function: process_one_hot_encoder in: 1.77 seconds
+15:52:39 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:52:43 - Executed function: process_standarization in: 0.19 seconds
+15:52:44 - Executed function: process_one_hot_encoder in: 1.84 seconds
+15:52:44 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:53:38 - Executed function: process_standarization in: 0.22 seconds
+15:53:40 - Executed function: process_one_hot_encoder in: 2.00 seconds
+15:53:40 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:54:41 - Executed function: process_standarization in: 0.19 seconds
+15:54:43 - Executed function: process_one_hot_encoder in: 1.82 seconds
+15:54:43 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:54:46 - Executed function: process_standarization in: 0.02 seconds
+15:54:48 - Executed function: process_one_hot_encoder in: 1.75 seconds
+15:54:48 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:54:51 - Executed function: process_standarization in: 0.13 seconds
+15:54:53 - Executed function: process_one_hot_encoder in: 1.79 seconds
+15:54:53 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:55:15 - Executed function: process_standarization in: 0.17 seconds
+15:55:16 - Executed function: process_one_hot_encoder in: 1.78 seconds
+15:55:16 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:56:29 - Executed function: process_standarization in: 0.15 seconds
+15:56:30 - Executed function: process_one_hot_encoder in: 1.89 seconds
+15:56:30 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:56:54 - Executed function: process_standarization in: 0.08 seconds
+15:56:56 - Executed function: process_one_hot_encoder in: 1.78 seconds
+15:56:56 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:57:03 - Executed function: training in: 7.74 seconds
+15:57:59 - Executed function: process_standarization in: 0.20 seconds
+15:58:00 - Executed function: process_one_hot_encoder in: 1.83 seconds
+15:58:00 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:58:03 - Executed function: process_standarization in: 0.11 seconds
+15:58:05 - Executed function: process_one_hot_encoder in: 1.75 seconds
+15:58:05 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:58:35 - Executed function: process_standarization in: 0.10 seconds
+15:58:37 - Executed function: process_one_hot_encoder in: 1.77 seconds
+15:58:37 - Data preprocessing completed. Dataset shape: (1001, 32)
+15:59:00 - Executed function: training in: 23.01 seconds
+15:59:31 - Executed function: process_standarization in: 0.12 seconds
+15:59:32 - Executed function: process_one_hot_encoder in: 1.75 seconds
+15:59:32 - Data preprocessing completed. Dataset shape: (1001, 32)

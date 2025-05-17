@@ -176,9 +176,10 @@ class Transformations:
                 instance.std_type = data_object["type"]
                 instance.srednie = data_object["srednie"]
                 instance.odchylenia_w_kolumnach = data_object["odchylenia_w_kolumnach"]
+                return instance
             except Exception as e :
                 pass
-            return instance
+
         except FileNotFoundError:
             print(f"File {full_path} not found.")
         except KeyError as e:

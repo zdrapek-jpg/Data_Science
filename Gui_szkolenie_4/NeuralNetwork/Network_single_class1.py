@@ -2,7 +2,7 @@
 import json
 from Data.SPLIT_test_valid_train import SplitData
 from NeuralNetwork.One_Layer import LayerFunctions
-
+from Data.Decorator_time_logging import log_execution_time
 class NNetwork():
     __slots__ = ["epoki","alpha","_Network","loss","train_accuracy","valid_accuracy", "valid_loss","optimizer","gradients"]
     def __init__(self,w=None,epoki=None,alpha=0.02,optimizer=None,gradients=None):
@@ -146,19 +146,10 @@ class NNetwork():
                     czy_modelowi_nie_spada_jakosc =self.train_accuracy[-2]>train_acc and self.valid_accuracy[-2]>valid_acc
                     czy_modelowi_nie_rosnie_blod = self.loss[-2]-self.loss[-1]>=0.013 and self.valid_loss[-2]-self.valid_loss[-1]>=0.013
                     if  (czy_oba_wieksze_od80 and(czy_modelowi_nie_spada_jakosc and czy_modelowi_nie_rosnie_blod )) or train_acc>=0.99 or valid_acc>=0.99 :
-                        print(f"Train Acc > 0.80 and Valid Acc > 0.80: {czy_oba_wieksze_od80}")
-                        print(f"Model quality is not dropping: {czy_modelowi_nie_spada_jakosc}")
-                        print(f"Model error is not increasing: {czy_modelowi_nie_rosnie_blod}")
-                        print("przerwanie",j)
                         break
                 if j >=50 and j%50==0:
                     loss_greater_than01 = self.loss[-1] >= 0.1 and self.valid_loss[-1] >= 0.1
                     accuracys_loss_than = train_acc < 0.60 or valid_acc < 0.60
-
-                    # print(f"Loss > 0.1 and Valid Loss >= 0.09: {loss_greater_than01}")
-                    # print(f"Training Acc < 0.60 and Valid Acc < 0.60: {accuracys_loss_than}")
-                    # print("-" * 50)
-                    # Combined condition
                     if  loss_greater_than01  or accuracys_loss_than :
                         print("zmiana parametrów", j)
                         for layer in self._Network:
@@ -183,7 +174,7 @@ class NNetwork():
         strata = (error / len(y_test))[0]
         #print(predictions)
         return (sum([1 if y_pred == y_origin else 0 for y_pred, y_origin in zip(predictions, y_test)]) / len(y_test)),strata
-
+    @log_execution_time
     def pred(self,point):
         point  =point.T
         output = point
@@ -231,14 +222,12 @@ class NNetwork():
         # Save to JSON file
         with open(path, "w") as model_file:
             json.dump(model_data, model_file,indent=2)
-            print("model saved")
+            print("model saved as:",path )
 
     @classmethod
     def create_instance(cls,path=r"C:\Program Files\Pulpit\Data_science\Gui_szkolenie_4\TrainData\model.json"):
         import json
         from numpy import array
-
-        path= r"C:\Program Files\Pulpit\Data_science\Gui_szkolenie_4\TrainData\model.json"
 
         with open(path, "r") as model_read:
             data = json.load(model_read)
