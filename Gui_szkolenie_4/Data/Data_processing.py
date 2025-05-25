@@ -25,15 +25,15 @@ data_1.loc[(data_1.balance>=4000) & (data_1.loan!="yes"),"y"] = "yes"
 
 
 
-
+#
 # kolumna ma 2 wartości "yes", "no"
-#za pomocą numpy zamieniamy wartośći na 0/1
-#na koncu rzutujemy dane na tak lub nie
+# za pomocą numpy zamieniamy wartośći na 0/1
+# na koncu rzutujemy dane na tak lub nie
 # new_y =np.asarray(np.where(y_1=="yes",1,0))
 
 data_2 = load_data(file_path=r"C:\Program Files\Pulpit\Data_science\Gui_szkolenie_4\TrainData\DataSet_for_ANN-checkpoint.csv")
 
-y_2 = data_2.loc[:,"Exited"]
+
 
 #wartości dla danych z zbioru 1 i 2   ograniczamy się do wartości od 0 do 1000 wierszy
 x1  =data_1.iloc[:1001,[0,1,2,3,5,7]]
@@ -46,10 +46,8 @@ y_1 = data_1.loc[:1001,"y"]
 merged_data["y"]= y_1
 
 merged_data.loc[(merged_data["loan"]=="no")&(merged_data["IsActiveMember"]==0) & (merged_data["job"]=="blue-collar"),"y"]="no"
-
 merged_data.rename(columns={merged_data.columns[2]: "Country"}, inplace=True)
-
-merged_data.to_csv(path_or_buf=r"C:\Program Files\Pulpit\Data_science\Gui_szkolenie_4\TrainData\new_data.csv",sep=";",columns=merged_data.keys(),index=False)
+merged_data.to_csv(path_or_buf=r"C:\Program Files\Pulpit\Data_science\Gui_szkolenie_4\TrainData\new_data.csv",sep=";",columns=merged_data.keys())
 
 
 val = merged_data["y"].unique()

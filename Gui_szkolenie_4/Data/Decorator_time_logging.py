@@ -10,6 +10,11 @@ logging.basicConfig(
     datefmt="%H:%M:%S"
 )
 def log_execution_time(function_to_measure):
+    """
+
+    :param function_to_measure: function that is called inside
+    :return:  update file with logging information abuot function name time of execution and running time of function
+    """
     @wraps(function_to_measure)
     def wrapper(*args, **kwargs):
         start = time.time()
@@ -25,7 +30,7 @@ def log_execution_time(function_to_measure):
             time_execution = f"{time_execution:.2f} seconds"
 
         # Log execution time
-        logging.info(f"Executed function: {function_to_measure.__name__} in: {time_execution}")
+        logging.info(f"Executed function: {function_to_measure.__name__} time:  {time_execution} ")
 
         return result
 

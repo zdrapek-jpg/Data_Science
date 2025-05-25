@@ -10,18 +10,22 @@ class LayerModificationMetaClass(type):
         def new_init(self, len_data, wyjscie_ilosc=1, activation_layer=None, optimizer=None, gradients=None):
             original_init(self, len_data, wyjscie_ilosc, activation_layer, optimizer, gradients)
             # initialization based on optimizer
-            if self.optimizer in ["momentum", "adam"]:
-                self.v_weights = np.zeros((len_data,wyjscie_ilosc)).T
-                self.v_biases =     np.zeros(wyjscie_ilosc).T
-                self.Beta = 0.9
-
-            if self.optimizer in ["adam"]:
-                self.RMSprop = 0.95
-                self.epsilion = 1e-8
-
             if self.gradients in ["batch", "mini-batch"]:
-                self.weights_exponential_d = np.zeros((len_data,wyjscie_ilosc)).T
-                self.biases_exponential_d = np.zeros(wyjscie_ilosc).T
+                self.weights_exponential_d = np.zeros((wyjscie_ilosc, len_data))
+                self.biases_exponential_d = np.zeros((wyjscie_ilosc,))
+
+            if self.optimizer in ["momentum", "adam","RMSprop"]:
+                self.v_weights = np.zeros((wyjscie_ilosc,len_data))
+                self.v_biases =     np.zeros(wyjscie_ilosc,)
+                self.Beta1 = 0.95
+            if self.optimizer in ["RMSprop","adam"]:
+                self.epsilion = 1e-8
+                self.Beta2 = 0.998
+            if self.optimizer=="adam":
+                self.timestep =1
+                self.m_weights =np.zeros((wyjscie_ilosc,len_data))
+                self.m_biases=   np.zeros(wyjscie_ilosc,)
+                self.timestep=1
 
         dct['__init__'] = new_init
         return super().__new__(cls, name, bases, dct)
@@ -29,7 +33,7 @@ class LayerModificationMetaClass(type):
 
 def optimizer_decorator(function):
     """
-    Decorator to apply specific optimization logic before or after a function call.
+    Decorator to describe  logic before or after a function call.
     """
     def wrapper(self, *args, **kwargs):
         if self.optimizer == "adam":
@@ -39,7 +43,9 @@ def optimizer_decorator(function):
         if  self.gradients == "mini-batch":
             print("applying mini batch gradient descent")
         elif self.optimizer == "momentum":
-            print("applying Momentum pptimization")
+            print("applying Momentum optimization")
+        elif self.optimizer=="RMSprop":
+            print("applying RMSprop optimization")
         else:
             print("it seems that function uses Stochastic Gradient Descent optimization")
         print("Model Optimizer Information:")
@@ -62,8 +68,15 @@ def optimizer_decorator(function):
 
 
 class LayerFunctions(metaclass=LayerModificationMetaClass):
-    __slots__ = ["len_data","wyjscia_ilosc","activation_layer","bias","wagi","alfa","loss","accuracy","Beta","weights_exponential_d","biases_exponential_d","v_weights","v_biases","optimizer","gradients","epsilion","RMSprop"]
-    def __init__(self, len_data, wyjscie_ilosc=1,activation_layer=None,optimizer=None,gradients=None ):
+    __slots__ = ["len_data","wyjscia_ilosc","activation_layer","bias","wagi","alfa","loss","accuracy","Beta1","weights_exponential_d","biases_exponential_d","v_weights","v_biases","optimizer","gradients","epsilion","Beta2","moment","m_weights","m_biases","timestep"]
+    def __init__(self, len_data:int, wyjscie_ilosc:int =1,activation_layer:str=None,optimizer:str="",gradients:str=None ):
+        """
+        :param len_data:  data input lenght of one row  int
+        :param wyjscie_ilosc:  number of neurons we want to have int
+        :param activation_layer:  name of activation layer sigmoid,relu,elu,
+        :param optimizer:  optional : adam,RMSprop,momentum
+        :param gradients:  optional : mini-batch,batch, else SGD
+        """
         self.len_data = len_data
         self.wyjscia_ilosc = wyjscie_ilosc
         self.activation_layer = activation_layer
@@ -107,18 +120,20 @@ class LayerFunctions(metaclass=LayerModificationMetaClass):
         if weights_forward is None and  gradient2 is None:
             pochodna_aktywacji = self.derivations(y_pred)
             pochodna_wyjscia =y_pred-y_origin
-
+            ### warstwy ukryte
             gradient  = pochodna_wyjscia* pochodna_aktywacji
-            self.bias  -= self.alfa*gradient
-            self.wagi  -= self.alfa*gradient*point.reshape(1,12)
+            self.biases_exponential_d = gradient
+            self.weights_exponential_d= gradient*point.reshape(1,self.len_data)
+            self.backward_update_params()
             return gradient
         pochodna_aktywacji = self.derivations(y_pred)
 
         # gradient dla wszystkoch warstw ukrytych
         gradient =   np.dot(weights_forward.T,gradient2)
         gradient *= pochodna_aktywacji
-        self.bias -= self.alfa*gradient
-        self.wagi -= np.outer(gradient,self.alfa)*point
+        self.biases_exponential_d = gradient
+        self.weights_exponential_d= np.outer(gradient,self.alfa)*point
+        self.backward_update_params()
         return gradient
 
     def backward_batches(self,y_pred=None,point=None,pochodna_wyjscia=None,weights_forward=None,gradient2=None,for_average=None):
@@ -128,7 +143,7 @@ class LayerFunctions(metaclass=LayerModificationMetaClass):
         if pochodna_wyjscia is  not None:
             gradient = pochodna_wyjscia * pochodna_aktywacji
             self.biases_exponential_d   +=   gradient
-            self.weights_exponential_d  +=  gradient * point.reshape(1, 12)
+            self.weights_exponential_d  +=  gradient * point.reshape(1, self.len_data)
             return gradient
 
         if weights_forward is not  None:
@@ -139,13 +154,43 @@ class LayerFunctions(metaclass=LayerModificationMetaClass):
             self.weights_exponential_d  += np.outer(gradient, 1) * point
             return  gradient
 
-        self.weights_exponential_d/=for_average
-        self.biases_exponential_d /=for_average
-        self.v_weights = self.Beta * self.v_weights + (1 - self.Beta) * self.weights_exponential_d
-        self.v_biases = self.Beta * self.v_biases + (1 - self.Beta) * self.biases_exponential_d
+    def backward_update_params(self,for_average=1):
+        self.weights_exponential_d /= for_average
+        self.biases_exponential_d /= for_average
 
-        self.bias -= self.alfa *self.v_biases
-        self.wagi-= self.alfa* self.v_weights
+        if self.optimizer=="momentum":
+            self.v_weights = self.Beta1 * self.v_weights+ (1 - self.Beta1) * self.weights_exponential_d
+            self.v_biases = self.Beta1 * self.v_biases + (1 - self.Beta1) * self.biases_exponential_d
+
+            self.bias -= self.alfa *self.v_biases
+            self.wagi-= self.alfa*self.v_weights
+            return
+        if self.optimizer=="RMSprop":
+            self.v_weights = self.Beta2 * self.v_weights + (1 - self.Beta2) * (self.weights_exponential_d ** 2)
+            self.v_biases = self.Beta2 * self.v_biases + (1 - self.Beta2) * (self.biases_exponential_d ** 2)
+
+            self.wagi -= self.alfa / (np.sqrt(self.v_weights) + self.epsilion) * self.weights_exponential_d
+            self.bias -= self.alfa / (np.sqrt(self.v_biases) + self.epsilion) * self.biases_exponential_d
+            return
+        if self.optimizer=="adam":
+            self.m_weights =self.Beta1*self.m_weights+ (1-self.Beta1)*self.weights_exponential_d
+            self.m_biases  =self.Beta1*self.m_biases +(1-self.Beta1)*self.biases_exponential_d
+            self.v_weights =self.Beta2*self.v_weights + (1-self.Beta2) * (self.weights_exponential_d**2)
+            self.v_biases  =self.Beta2*self.v_biases +(1-self.Beta2)*(self.biases_exponential_d**2)
+
+            t = getattr(self, "timestep", 1)
+            self.timestep = t + 1
+            m_hat_w = self.m_weights / (1 - self.Beta1 ** t)
+            m_hat_b = self.m_biases / (1 - self.Beta1 ** t)
+
+            v_hat_w = self.v_weights / (1 - self.Beta2 ** t)
+            v_hat_b = self.v_biases / (1 - self.Beta2 ** t)
+            self.wagi -=self.alfa*m_hat_w/(np.sqrt(v_hat_w)+self.epsilion)
+            self.bias -= self.alfa*m_hat_b/(np.sqrt(v_hat_b)+self.epsilion)
+        else:
+            self.wagi-=self.weights_exponential_d
+            self.bias-= self.biases_exponential_d
+
     def activation(self, suma_wazona):
         """
         :return activatiob of product according to choosen self.activation_layer
@@ -183,36 +228,29 @@ class LayerFunctions(metaclass=LayerModificationMetaClass):
         self.random_alfa(alfa)
         self.random_bias()
         self.random_weights()
-        # if self.gradients == "batch" or self.gradients == "mini-batch":
-        #     self.weights_exponential_d = np.zeros_like(self.wagi)
-        #     self.biases_exponential_d = np.zeros_like(self.bias)
-        # if self.optimizer == "momentum":
-        #     self.v_weights = np.zeros_like(self.wagi)
-        #     self.v_biases = np.zeros_like(self.bias)
-        # if self.optimizer=="adagrad":
-        #     self.epsilion= 1e-9
-
         return self.alfa[0]
 
-
     def random_weights(self):
-        self.wagi = np.random.rand( self.len_data,self.wyjscia_ilosc).T*random.choice([-0.2,0.2])
+        self.wagi = np.random.uniform(low=-0.2,high=0.2,size=(self.wyjscia_ilosc,self.len_data))
+
     def random_bias(self):
-        self.bias = np.random.rand(self.wyjscia_ilosc).T*random.choice([0.3,-0.3,-0.2,0.2])
+        self.bias = np.random.uniform(low=-0.2,high=0.2,size=(self.wyjscia_ilosc,))
+
     def random_alfa(self,a=None):
         if a!=None:
             self.alfa = np.array([a])
         else:
-            x =round(random.random() * 0.65, 3)
-            self.alfa = np.array([round(x if x<=0.2 and x>=0.09  else x+0.05 if x<=0.09 else x-0.2,4) ])
+            x =np.array([0.05])
+
 
     @optimizer_decorator
-    def return_params(self):
+    def return_params(self,show=False):
         """
         Returns model parameters.
         """
-        return {
+        if show:
+            return {
             "wagi": self.wagi,
             "bias": self.bias,
-            "activation": self.activation_layer
-        }
+            "activation": self.activation_layer}
+        return

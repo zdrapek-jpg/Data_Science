@@ -1,17 +1,17 @@
 {
   "Country": {
     "label_code": {
-      "0": "Spain",
-      "1": "France",
+      "0": "France",
+      "1": "Spain",
       "2": "Germany"
     },
     "decoded_set": {
-      "Spain": [
+      "France": [
         1.0,
         0.0,
         0.0
       ],
-      "France": [
+      "Spain": [
         0.0,
         1.0,
         0.0
@@ -27,17 +27,17 @@
   "job": {
     "label_code": {
       "0": "housemaid",
-      "1": "unemployed",
-      "2": "blue-collar",
-      "3": "entrepreneur",
-      "4": "retired",
-      "5": "services",
-      "6": "management",
-      "7": "unknown",
-      "8": "admin.",
-      "9": "self-employed",
-      "10": "technician",
-      "11": "student"
+      "1": "self-employed",
+      "2": "management",
+      "3": "blue-collar",
+      "4": "services",
+      "5": "technician",
+      "6": "retired",
+      "7": "student",
+      "8": "unknown1",
+      "9": "entrepreneur",
+      "10": "admin.",
+      "11": "unemployed"
     },
     "decoded_set": {
       "housemaid": [
@@ -54,10 +54,24 @@
         0.0,
         0.0
       ],
-      "unemployed": [
+      "self-employed": [
         0.0,
         1.0,
         0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "management": [
+        0.0,
+        0.0,
+        1.0,
         0.0,
         0.0,
         0.0,
@@ -71,37 +85,9 @@
       "blue-collar": [
         0.0,
         0.0,
-        1.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "entrepreneur": [
-        0.0,
-        0.0,
         0.0,
         1.0,
         0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "retired": [
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        1.0,
         0.0,
         0.0,
         0.0,
@@ -115,6 +101,20 @@
         0.0,
         0.0,
         0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "technician": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
         0.0,
         1.0,
         0.0,
@@ -124,7 +124,7 @@
         0.0,
         0.0
       ],
-      "management": [
+      "retired": [
         0.0,
         0.0,
         0.0,
@@ -138,7 +138,7 @@
         0.0,
         0.0
       ],
-      "unknown": [
+      "student": [
         0.0,
         0.0,
         0.0,
@@ -149,6 +149,34 @@
         1.0,
         0.0,
         0.0,
+        0.0,
+        0.0
+      ],
+      "unknown1": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "entrepreneur": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
         0.0,
         0.0
       ],
@@ -161,40 +189,12 @@
         0.0,
         0.0,
         0.0,
-        1.0,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "self-employed": [
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        1.0,
-        0.0,
-        0.0
-      ],
-      "technician": [
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
         0.0,
         0.0,
         1.0,
         0.0
       ],
-      "student": [
+      "unemployed": [
         0.0,
         0.0,
         0.0,
@@ -213,17 +213,17 @@
   },
   "marital": {
     "label_code": {
-      "0": "divorced",
-      "1": "single",
+      "0": "single",
+      "1": "divorced",
       "2": "married"
     },
     "decoded_set": {
-      "divorced": [
+      "single": [
         1.0,
         0.0,
         0.0
       ],
-      "single": [
+      "divorced": [
         0.0,
         1.0,
         0.0
@@ -238,13 +238,13 @@
   },
   "education": {
     "label_code": {
-      "0": "primary",
+      "0": "tertiary",
       "1": "secondary",
-      "2": "tertiary",
-      "3": "unknown"
+      "2": "unknown",
+      "3": "primary"
     },
     "decoded_set": {
-      "primary": [
+      "tertiary": [
         1.0,
         0.0,
         0.0,
@@ -256,13 +256,13 @@
         0.0,
         0.0
       ],
-      "tertiary": [
+      "unknown": [
         0.0,
         0.0,
         1.0,
         0.0
       ],
-      "unknown": [
+      "primary": [
         0.0,
         0.0,
         0.0,

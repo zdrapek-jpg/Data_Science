@@ -54,8 +54,8 @@ class Transformations:
             for el in sequence_like_column:
                 s += el
             # print(round(s,6))
-            return 0 if -0.00001 < round(s / len(sequence_like_column), 5) < 0.00001 else round(
-                s / len(sequence_like_column), 5)
+            return 0 if -0.001 < round(s / len(sequence_like_column), 3) < 0.001 else round(
+                (s / len(sequence_like_column)), 2)
 
         # jeśli obiekt nie jest obiektem tylko pojedyńczą wartością
         # jeśli wartość istnieje zwracamy ją w przeciwnym razie zwracamy 0
@@ -88,14 +88,14 @@ class Transformations:
         if self.std_type.value=="normalization":
             for i, (MIN,MAX) in enumerate(zip(self.minimums,self.maximums)):
                 list_containing_column_values = data.iloc[:,i].values.tolist()
-                new_data[klucze[i]]= [ round((x- MIN)/(MAX-MIN),6) for x in list_containing_column_values]
+                new_data[klucze[i]]= [ round((x- MIN)/(MAX-MIN),4) for x in list_containing_column_values]
 
         elif self.std_type.value=="mean_score":
             for i, (MIN,MAX) in enumerate(zip(self.minimums,self.maximums)):
                 list_containing_column_values = data.iloc[:,i].values.tolist()
                 srednia_kolumny= self.srednia(list_containing_column_values)
                 self.srednie.append(srednia_kolumny)
-                new_data[klucze[i]]= [(x- srednia_kolumny)/(MAX-MIN) for x in list_containing_column_values]
+                new_data[klucze[i]]= [round((x- srednia_kolumny)/(MAX-MIN),4) for x in list_containing_column_values]
 
         elif self.std_type.value =="standaryzacja_z_score":
             for i in range(data.shape[-1]):
@@ -103,7 +103,7 @@ class Transformations:
                 srednia_kolumny = self.srednia(list_containing_column_values)
                 std =self.odchylenie_standardowe(srednia_kolumny,list_containing_column_values)
                 self.srednie.append(srednia_kolumny)
-                new_data[klucze[i]] = [(x -srednia_kolumny)/std for x in list_containing_column_values]
+                new_data[klucze[i]] = [round(((x -srednia_kolumny)/std),4) for x in list_containing_column_values]
 
         elif self.std_type.value =="log_scalling" :
             granica_0 =np.finfo(float).eps()
@@ -123,17 +123,17 @@ class Transformations:
 
         if self.std_type == "normalization":
             assert len(point) == len(self.minimums) == len(self.maximums),f"data {len(point)} == {len(self.minimums)} == {len(self.maximums)} not equal"
-            return [round((x - MIN) / (MAX - MIN), 6) for x,MIN,MAX in zip(point,self.minimums,self.maximums)]
+            return [round((x - MIN) / (MAX - MIN),4) for x,MIN,MAX in zip(point,self.minimums,self.maximums)]
 
         elif self.std_type == "mean_score":
             assert len(point) == len(self.minimums) == len(
                 self.maximums)==len(self.srednie), f"data {len(point)} == {len(self.minimums)} == {len(self.maximums)} == {len(self.srednie)} not equal"
-            return  [(x - srednia_kolumny) / (MAX - MIN) for x,srednia_kolumny,MIN,MAX in zip(point,self.srednie,self.minimums,self.maximums)]
+            return  [round((x - srednia_kolumny) / (MAX - MIN),4) for x,srednia_kolumny,MIN,MAX in zip(point,self.srednie,self.minimums,self.maximums)]
 
         elif self.std_type == "standaryzacja_z_score":
             assert len(point) == len(self.srednie) == len(
                 self.odchylenia_w_kolumnach), f"data {len(point)} == {len(self.srednie)} == {len(self.odchylenia_w_kolumnach)} not equal"
-            return  [(x - srednia_kolumny) / std for x,srednia_kolumny,std in zip(point,self.srednie,self.odchylenia_w_kolumnach)]
+            return  [round((x - srednia_kolumny) / std,4) for x,srednia_kolumny,std in zip(point,self.srednie,self.odchylenia_w_kolumnach)]
 
         elif self.std_type == "log_scalling":
             granica_0 = np.finfo(float).eps()
@@ -151,11 +151,10 @@ class Transformations:
             "maximums": self.maximums,
             "srednie": self.srednie,
             "odchylenia_w_kolumnach": self.odchylenia_w_kolumnach,
-            "type":self.std_type.value
         }
 
         # Filter out keys where the value is None or empty
-        filtered_data = {k: v for k, v in data.items() if  len(v) >= 1}
+        filtered_data = {k: v for k, v in data.items() if  len(v) >= 1 and v }
 
         # Only add std_type if there's other data
         filtered_data["std_type"] = self.std_type.value
@@ -170,16 +169,21 @@ class Transformations:
             with open(full_path, "r") as file_read:
                 data_object = json.load(file_read)  # Wczytaj jako słownik (dict)
                 instance = cls()
-            try:
-                instance.minimums = data_object["minimums"]
-                instance.maximums = data_object["maximums"]
-                instance.std_type = data_object["type"]
-                instance.srednie = data_object["srednie"]
-                instance.odchylenia_w_kolumnach = data_object["odchylenia_w_kolumnach"]
-                return instance
-            except Exception as e :
-                pass
+                if all(k in data_object.keys() for k in ["minimums", "maximums"]):
+                    instance.minimums = data_object["minimums"]
+                    instance.maximums = data_object["maximums"]
 
+                instance.std_type = StandardizationType[data_object["std_type"].upper()].value
+
+                if all(k in data_object.keys() for k in ["srednie", "odchylenie_w_kolumnach"]):
+                    instance.srednie = data_object["srednie"]
+                    instance.odchylenia_w_kolumnach = data_object["odchylenie_w_kolumnach"]
+
+                return instance
+
+        except Exception as e:
+            print(f"Error while initializing instance: {e}")
+            pass
         except FileNotFoundError:
             print(f"File {full_path} not found.")
         except KeyError as e:

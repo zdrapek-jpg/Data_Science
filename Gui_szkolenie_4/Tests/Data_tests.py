@@ -1,4 +1,5 @@
 # Testy wszystkich funkcjonalności złożonych z danych
+import flask.cli
 
 from Data.Transformers import Transformations
 from Data.Multiple_points import multiply
@@ -73,17 +74,22 @@ new_d = pd.Series(["średnia","wysoka","niska","wysoka","niska","niska"],name="t
 d = pd.DataFrame(x)
 d["y"] = y
 d =pd.concat((d,new_d),axis=1)
-one_h = OneHotEncoder(d)
+one_h = OneHotEncoder()
 print()
-#print(d)
-one_h.new_one_hot_encoder_keys(d.iloc[:,:-2])
-one_h.new_label_encoder_keys(d.iloc[:,[-1,-2]],[["niska","średnia","wysoka"],[5,1,0]])
-#print(one_h.data_code)
-one_h.new_code_y_for_network(d)
+
+one_h.code_keys(d.iloc[:, :-2])
+one_h.label_encoder_keys(d.iloc[:, [-1, -2]], [["niska", "średnia", "wysoka"], [5, 1, 0]])
+one_h.code_y_for_network(d)
 new =pd.DataFrame([["a","kinga",5,"wysoka"]],columns=d.columns)
-print(new)
-output = one_h.new_code_y_for_network(new)
-print(output)
+
+output = one_h.code_y_for_network(new)
+
+
+
+print(one_h.data_code)
+one_h.save_data()
+from flask import Flask
+#print(flask.cli.version_option())
 
 
 

@@ -14,7 +14,7 @@ class SplitData:
     valid = 0.4
     test = 0.2
     @classmethod
-    def set(cls,train=0.4,valid=0.4,test=0.2):
+    def set(cls,train=0.6,valid=0.2,test=0.2):
         cls.train = train  # 0.40
         cls.valid = valid  # 0.40
         cls.test = test  # 0.20
@@ -31,7 +31,13 @@ class SplitData:
             cls.train+= 1 - (cls.valid+cls.test)
         if  0>cls.train+cls.valid+cls.test>1:
             raise "nie można podzielić zbioru podano podział który uwzględdnia ponad 100 % zbioru"
-        shuffled_data = data.sample(frac =1).reset_index(drop=True)
+        shuffled_data = data.sample(frac =1,random_state=32).reset_index(drop=True) #random_state=50
+        #shuffled_data = data
+        ## augumentation, kkrotna walidacja skrośna,crossvalidation!!
+        # cał zbiór jest dielony na ustaloną ilość,
+        # trening odbywa się że z 5 jest wybierany jeden zbiór który jest wybierany na vaildacyjny
+        #valid =5 train[1,4] i iterujemy się po koleji zmieniając grupe walidacyjną
+        #
 
         # podzielenie na x i y
         # domyślnie że y jest ostanią kolumną
