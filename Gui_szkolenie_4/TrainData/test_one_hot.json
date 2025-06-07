@@ -1,22 +1,22 @@
 {
   "Country": {
     "label_code": {
-      "0": "France",
-      "1": "Spain",
-      "2": "Germany"
+      "0": "Germany",
+      "1": "France",
+      "2": "Spain"
     },
     "decoded_set": {
-      "France": [
+      "Germany": [
         1.0,
         0.0,
+        0.0
+      ],
+      "France": [
+        0.0,
+        1.0,
         0.0
       ],
       "Spain": [
-        0.0,
-        1.0,
-        0.0
-      ],
-      "Germany": [
         0.0,
         0.0,
         1.0
@@ -26,21 +26,21 @@
   },
   "job": {
     "label_code": {
-      "0": "housemaid",
-      "1": "self-employed",
+      "0": "retired",
+      "1": "entrepreneur",
       "2": "management",
-      "3": "blue-collar",
-      "4": "services",
-      "5": "technician",
-      "6": "retired",
-      "7": "student",
-      "8": "unknown1",
-      "9": "entrepreneur",
+      "3": "technician",
+      "4": "unemployed",
+      "5": "blue-collar",
+      "6": "student",
+      "7": "housemaid",
+      "8": "self-employed",
+      "9": "services",
       "10": "admin.",
-      "11": "unemployed"
+      "11": "unknown1"
     },
     "decoded_set": {
-      "housemaid": [
+      "retired": [
         1.0,
         0.0,
         0.0,
@@ -54,7 +54,7 @@
         0.0,
         0.0
       ],
-      "self-employed": [
+      "entrepreneur": [
         0.0,
         1.0,
         0.0,
@@ -82,41 +82,13 @@
         0.0,
         0.0
       ],
-      "blue-collar": [
-        0.0,
-        0.0,
-        0.0,
-        1.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "services": [
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        1.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0
-      ],
       "technician": [
         0.0,
         0.0,
         0.0,
-        0.0,
-        0.0,
         1.0,
+        0.0,
+        0.0,
         0.0,
         0.0,
         0.0,
@@ -124,14 +96,28 @@
         0.0,
         0.0
       ],
-      "retired": [
+      "unemployed": [
         0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "blue-collar": [
         0.0,
         0.0,
         0.0,
         0.0,
         0.0,
         1.0,
+        0.0,
         0.0,
         0.0,
         0.0,
@@ -145,6 +131,20 @@
         0.0,
         0.0,
         0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "housemaid": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
         0.0,
         1.0,
         0.0,
@@ -152,7 +152,7 @@
         0.0,
         0.0
       ],
-      "unknown1": [
+      "self-employed": [
         0.0,
         0.0,
         0.0,
@@ -166,7 +166,7 @@
         0.0,
         0.0
       ],
-      "entrepreneur": [
+      "services": [
         0.0,
         0.0,
         0.0,
@@ -194,7 +194,7 @@
         1.0,
         0.0
       ],
-      "unemployed": [
+      "unknown1": [
         0.0,
         0.0,
         0.0,
@@ -213,12 +213,12 @@
   },
   "marital": {
     "label_code": {
-      "0": "single",
+      "0": "married",
       "1": "divorced",
-      "2": "married"
+      "2": "single"
     },
     "decoded_set": {
-      "single": [
+      "married": [
         1.0,
         0.0,
         0.0
@@ -228,7 +228,7 @@
         1.0,
         0.0
       ],
-      "married": [
+      "single": [
         0.0,
         0.0,
         1.0
@@ -238,13 +238,13 @@
   },
   "education": {
     "label_code": {
-      "0": "tertiary",
+      "0": "unknown",
       "1": "secondary",
-      "2": "unknown",
-      "3": "primary"
+      "2": "primary",
+      "3": "tertiary"
     },
     "decoded_set": {
-      "tertiary": [
+      "unknown": [
         1.0,
         0.0,
         0.0,
@@ -256,13 +256,13 @@
         0.0,
         0.0
       ],
-      "unknown": [
+      "primary": [
         0.0,
         0.0,
         1.0,
         0.0
       ],
-      "primary": [
+      "tertiary": [
         0.0,
         0.0,
         0.0,

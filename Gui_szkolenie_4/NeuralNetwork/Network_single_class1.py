@@ -1,10 +1,8 @@
 # Tu Będzie zbudowana sieć neuronowa która edzie miałą warstwy złożone z One_Layer
 import json
-from random import random,shuffle
-
+import random
 import numpy as np
 import pandas as pd
-
 from Data.SPLIT_test_valid_train import SplitData
 from NeuralNetwork.One_Layer import LayerFunctions
 from Data.Decorator_time_logging import log_execution_time
@@ -34,17 +32,18 @@ class NNetwork():
         self.valid_accuracy = []
         self.valid_loss = []
 
-    def add_layer(self,inputs,outputs,activation_layer_name):
+    def add_layer(self,inputs:int,outputs:int,activation_layer_name:str,seed_for_all:int=32):
         """
-        add layer to network one after another if shape of input size  is not accuret with input of new layer raise exception
+        add layer to network one after another if shape of input size  is not accurate with input of new layer raise exception
+        :param seed_for_all:  seed for bias and weights of this layer
         :param inputs: size of input data
         :param outputs: num of neurons
-        :param activation_layer_name:  activation fucntion for the layer
+        :param activation_layer_name:  activation function for the layer
         :return:  add layer to model
         """
         # instancja klasy warstwy
         instance_of_layer = LayerFunctions(len_data= inputs,wyjscie_ilosc= outputs,activation_layer=activation_layer_name,optimizer=self.optimizer,gradients=self.gradients)
-        instance_of_layer.start(self.alpha)
+        instance_of_layer.start(self.alpha,seed=seed_for_all)
 
 
         if len(self._Network)>=1:
@@ -57,8 +56,8 @@ class NNetwork():
 
         :param x_train: train data numpy.array()
         :param y_train:  y data numpy.array()
-        :param x_validate: data for validation of learning porcess data numpy.array()
-        :param y_validate: data for validation of learning porcess data numpy.array()
+        :param x_validate: data for validation of learning process data numpy.array()
+        :param y_validate: data for validation of learning process data numpy.array()
         :return: update parameters of network like weights and biases
         """
         for j in range(1, self.epoki + 1):
@@ -129,32 +128,24 @@ class NNetwork():
         : use  mini batch backpropagation that requires optimizer  set to 'mini-batch' or 'batch'
         :return:
         """
-        # Assume `data` is your full dataset: a pandas DataFrame
-        X = data.iloc[:, :-1].values  # Convert to NumPy array if needed
-        Y = data.iloc[:, -1].values
-        from sklearn.model_selection import KFold
 
-        kf = KFold(n_splits=5, shuffle=True, random_state=42)
-        fold_indices = list(kf.split(X))
+        X = data.iloc[:, :-1].values
+        Y = data.iloc[:, -1].values
+
+        from Data.SPLIT_test_valid_train import SplitData
+        splitter = SplitData()
+        groups_for_model = splitter.split_in_groups(X, 6, 0.6)
+        groups = splitter.get_in_order(groups_for_model)
 
         help = 0
         for j in range(self.epoki+1):
-            fold_order = list(range(5))
-            shuffle(fold_order)
+            train_idx, valid_idx = random.sample(groups, 2)
+            x_train = X[groups_for_model[train_idx][0]]  # 0.6
+            x_valid = X[groups_for_model[valid_idx][1]]  # 0.4
+            y_train = Y[groups_for_model[train_idx][0]].reshape(-1, )
+            y_valid = Y[groups_for_model[valid_idx][1]].reshape(-1, )
 
-            # Pick validation fold
-            val_fold = fold_order[0]
-            val_idx = fold_indices[val_fold][1]
-            x_valid = X[val_idx]
-            y_valid = Y[val_idx]
 
-            # Pick 3 of remaining 4 folds for training
-            train_folds = fold_order[1:4]
-            train_idx = np.concatenate([fold_indices[i][1] for i in train_folds])
-            x_train = X[train_idx]
-            y_train = Y[train_idx]
-
-            # Merge x and y into training set
             data_train = SplitData.merge(x_train, y_train)
             batch_x, batch_y = NNetwork.split_on_batches(data_train, batch_size)
 
@@ -203,7 +194,7 @@ class NNetwork():
             self.valid_accuracy.append(valid_acc)
 
             try:
-                if (train_acc / self.train_accuracy[-3]) >= 1.01 and train_acc >= 0.56 and valid_acc > 0.55 and help<=14:
+                if (train_acc / self.train_accuracy[-3]) >= 1.02 and train_acc >= 0.67 and valid_acc > 0.76 and help<=14:
                     print("zmniejszenie wag",j)
                     self.alpha = self.alpha *0.5
                     help+=1
@@ -216,13 +207,6 @@ class NNetwork():
                     przynajmniej_jeden_spada = self.train_loss[-2]>self.train_loss[-1] and self.valid_loss[-2]>self.valid_loss[-1]
                     if  (czy_oba_wieksze_od80 and(czy_modelowi_nie_spada_jakosc and czy_modelowi_nie_rosnie_blod )) or ((train_acc>=0.99 and valid_acc>=0.97) or (valid_acc>=0.99 and train_acc>=0.97) and  not przynajmniej_jeden_spada ) :
                         break
-                if j >=50 and j%50==0:
-                    loss_greater_than01 = self.train_loss[-1] >= 0.1 and self.valid_loss[-1] >= 0.1
-                    accuracys_loss_than = train_acc < 0.60 or valid_acc < 0.60
-                    if  loss_greater_than01  or accuracys_loss_than :
-                        print("zmiana parametrów", j)
-                        for layer in self._Network:
-                            layer.start(0.005)
 
             except Exception as e:
                 print("błąd ", e)
@@ -264,8 +248,8 @@ class NNetwork():
         for layer in self._Network:
             output = layer.train_forward(output)
         return output
-
-    def confusion_matrix(self,y_pred:list,y_origin:list):
+    @classmethod
+    def confusion_matrix(cls,y_pred:list,y_origin:list):
         """
 
         :param y_pred:  list of proedicted points
@@ -274,6 +258,7 @@ class NNetwork():
                             true     x        x
                            negative  x        x
         """
+        assert isinstance(y_pred,(list,set)) and isinstance(y_origin,(list,set))," print(obiekty przekazane do macierzy muszą być typu list() )"
         from numpy import zeros
         classes = set(y_pred+y_origin)
         size = classes.__len__()
@@ -317,7 +302,7 @@ class NNetwork():
         return batch_x, batch_y
     def write_model(self,path=r"C:\Program Files\Pulpit\Data_science\Gui_szkolenie_4\TrainData\model.json"):
         """
-        save model to passed location of data 
+        save model to passed location of data
         :param path:
         :return:
         """
@@ -327,8 +312,8 @@ class NNetwork():
         activations = [layer.activation_layer  for  layer in self._Network]
         Beta = self._Network[1].Beta1
         Beta2 = self._Network[1].Beta2
-        # v_weights =[np.zeros_like(layer.v_weights).tolist() for layer in self._Network ]
-        # v_biases = [np.zeros_like(layer.v_biases).tolist() for layer in self._Network ]
+        v_weights =[np.zeros_like(layer.v_weights).tolist() for layer in self._Network ]
+        v_biases = [np.zeros_like(layer.v_biases).tolist() for layer in self._Network ]
         epsilion = self._Network[1].epsilion
         # weights_exponential_d = [np.zeros_like(layer.weights_exponential_d).tolist() for layer in self._Network ]
         # biases_exponential_d =[np.zeros_like(layer.biases_exponential_d).tolist() for layer in self._Network ]
@@ -344,8 +329,8 @@ class NNetwork():
             "activations": activations,
             "optimizer":self.optimizer,
             "gradients":self.gradients,
-            # "v_weights":v_weights,
-            # "v_biases" :v_biases,
+            "v_weights":v_weights,
+            "v_biases" :v_biases,
             # "weights_exponential_d":weights_exponential_d,
             # "biases_exponential_d":biases_exponential_d,
             # "m_weights": m_weights ,
@@ -368,10 +353,12 @@ class NNetwork():
         gradients = data.get("gradients")
         # Wyczyszczenie listy warstw jeśli istnieje
         # doać Beta rmsprop epsilion i zmienne przychowywujące biasy i
-        for w, b, act in zip(
+        for w, b, act,v_w,v_b in zip(
                 data["weights"],
                 data["biases"],
-                data["activations"]
+                data["activations"],
+                data["v_weights"],
+                data["v_biases"]
         ):
             wyjscia_ilosc,len_data =np.array(w,dtype=np.float64).shape
             instance.add_layer(inputs=len_data,outputs=wyjscia_ilosc,activation_layer_name=act)
@@ -379,8 +366,8 @@ class NNetwork():
             instance._Network[-1].bias = np.array(b, dtype=np.float64)
             # instance._Network[-1].weights_exponential_d = np.array(w_exp_d, dtype=np.float64)
             # instance._Network[-1].biases_exponential_d = np.array(b_exp_d, dtype=np.float64)
-            # instance._Network[-1].v_weights = np.array(v_w, dtype=np.float64)
-            # instance._Network[-1].v_biases = np.array(v_b, dtype=np.float64)
+            instance._Network[-1].v_weights = np.array(v_w, dtype=np.float64)
+            instance._Network[-1].v_biases = np.array(v_b, dtype=np.float64)
             # instance._Network[-1].m_weights = np.array(m_w, dtype=np.float64)
             # instance._Network[-1].m_biases = np.array(m_b, dtype=np.float64)
         print("Model loaded from:", path)

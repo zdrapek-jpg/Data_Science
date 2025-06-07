@@ -1,4 +1,6 @@
 # Testy wszystkich funkcjonalności złożonych z danych
+import random
+
 import flask.cli
 
 from Data.Transformers import Transformations
@@ -86,13 +88,22 @@ output = one_h.code_y_for_network(new)
 
 
 
-print(one_h.data_code)
+#print(one_h.data_code)
 one_h.save_data()
 from flask import Flask
 #print(flask.cli.version_option())
 
+### data
+to_data_frame = pd.read_csv(r"C:\Program Files\Pulpit\Data_science\Zbiory\iris_orig.csv",delimiter=",")
+x = to_data_frame.iloc[:,:-1]
+from Data.Transformers import Transformations,StandardizationType
+norm = Transformations(x,StandardizationType.Z_SCORE)
+x =norm.standarization_of_data(x).values
 
 
 
-
-
+y = to_data_frame.iloc[:,-1]
+from Data.One_hot_Encoder import OneHotEncoder
+onehot = OneHotEncoder()
+onehot.label_encoder_keys(y,[['Iris-versicolor','Iris-setosa','Iris-virginica']])
+y = onehot.code_y_for_network(y).values

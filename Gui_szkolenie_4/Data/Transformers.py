@@ -15,7 +15,7 @@ class StandardizationType(Enum):
     - NORMALIZATION: Rescales data to a fixed range, typically [0, 1].
     """
     MEAN_SCORE = "mean_score"
-    Z_SCORE = "standaryzacja_z_score"
+    Z_SCORE = "z_score"
     LOG_SCALING = "log_scalling"
     NORMALIZATION = "normalization"
 
@@ -97,7 +97,7 @@ class Transformations:
                 self.srednie.append(srednia_kolumny)
                 new_data[klucze[i]]= [round((x- srednia_kolumny)/(MAX-MIN),4) for x in list_containing_column_values]
 
-        elif self.std_type.value =="standaryzacja_z_score":
+        elif self.std_type.value =="z_score":
             for i in range(data.shape[-1]):
                 list_containing_column_values = data.iloc[:, i].values.tolist()
                 srednia_kolumny = self.srednia(list_containing_column_values)
@@ -121,21 +121,21 @@ class Transformations:
         if not (isinstance(point, list)):
             raise "element podany do zbioru musi być listą "
 
-        if self.std_type == "normalization":
+        if self.std_type.value == "normalization":
             assert len(point) == len(self.minimums) == len(self.maximums),f"data {len(point)} == {len(self.minimums)} == {len(self.maximums)} not equal"
             return [round((x - MIN) / (MAX - MIN),4) for x,MIN,MAX in zip(point,self.minimums,self.maximums)]
 
-        elif self.std_type == "mean_score":
+        elif self.std_type.value == "mean_score":
             assert len(point) == len(self.minimums) == len(
                 self.maximums)==len(self.srednie), f"data {len(point)} == {len(self.minimums)} == {len(self.maximums)} == {len(self.srednie)} not equal"
             return  [round((x - srednia_kolumny) / (MAX - MIN),4) for x,srednia_kolumny,MIN,MAX in zip(point,self.srednie,self.minimums,self.maximums)]
 
-        elif self.std_type == "standaryzacja_z_score":
+        elif self.std_type.value == "z_score":
             assert len(point) == len(self.srednie) == len(
                 self.odchylenia_w_kolumnach), f"data {len(point)} == {len(self.srednie)} == {len(self.odchylenia_w_kolumnach)} not equal"
             return  [round((x - srednia_kolumny) / std,4) for x,srednia_kolumny,std in zip(point,self.srednie,self.odchylenia_w_kolumnach)]
 
-        elif self.std_type == "log_scalling":
+        elif self.std_type.value == "log_scalling":
             granica_0 = np.finfo(float).eps()
             return [np.log(x + granica_0) for x in point]
 
@@ -173,11 +173,12 @@ class Transformations:
                     instance.minimums = data_object["minimums"]
                     instance.maximums = data_object["maximums"]
 
-                instance.std_type = StandardizationType[data_object["std_type"].upper()].value
 
-                if all(k in data_object.keys() for k in ["srednie", "odchylenie_w_kolumnach"]):
+
+                if all(k in data_object.keys() for k in ["srednie", "odchylenia_w_kolumnach"]):
                     instance.srednie = data_object["srednie"]
-                    instance.odchylenia_w_kolumnach = data_object["odchylenie_w_kolumnach"]
+                    instance.odchylenia_w_kolumnach = data_object["odchylenia_w_kolumnach"]
+                instance.std_type = StandardizationType(data_object["std_type"])
 
                 return instance
 

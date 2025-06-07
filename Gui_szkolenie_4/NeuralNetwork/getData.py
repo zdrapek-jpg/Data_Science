@@ -68,6 +68,16 @@ def process_one_hot_encoder(data_containing_required_columns,data_containing_lab
 
 
 def data_preprocessing(std_column:list ,one_hot_column:list,label_encoder_column:list,std_type:StandardizationType,save_models=True,merged_data=None):
+    """
+
+    :param std_column:  columns for standarization
+    :param one_hot_column:  columns for onehotencoder
+    :param label_encoder_column:  columns for label encoder
+    :param std_type:  type of normalization
+    :param save_models:  if true data not required if false data required
+    :param merged_data:  required if save_model is False
+    :return:  full_data preprocesed
+    """
     if save_models:
         merged_data = load_data()
 
@@ -88,8 +98,8 @@ def data_preprocessing(std_column:list ,one_hot_column:list,label_encoder_column
 
 
 
-    print(normalized.shape)
-    print(data_one_hot.shape)
+    # print(normalized.shape)
+    # print(data_one_hot.shape)
 
     if normalized is None or data_one_hot is None:
         logging.error(f"Data processing failed. norm: {type(normalized)},one hot: {type(data_one_hot)} Exiting...")
@@ -102,7 +112,7 @@ def data_preprocessing(std_column:list ,one_hot_column:list,label_encoder_column
     data_set["Gender"] = merged_data["Gender"].values
 
     data_set = pd.concat((data_set, normalized), axis=1)
-    print("size ",data_set.columns)
+    #print("size ",data_set.columns)
     logging.info(f"Data preprocessing completed. Dataset shape: {data_set.shape}")
     if save_models:
         data_set["y"]= np.where(merged_data["y"]=="yes",1,0)
@@ -110,86 +120,3 @@ def data_preprocessing(std_column:list ,one_hot_column:list,label_encoder_column
     return data_set
 #
 # print(data_preprocessing(std_column=[1, 6, 7, 8, 12,4],one_hot_column=[2, 9, 10, 11],label_encoder_column=[],std_type= StandardizationType.NORMALIZATION,save_models= True))
-
-
-
-
-
-
-
-# import numpy as np
-#
-# # Inputs and labels
-# X = np.array([[0, 0.5, 1],[0.5, 1.5, 1],[0.5, 1, 1.5],[0, 0.5, 1],[0.5, 1.5, 1],[0.5, 1, 0]])  # shape (2, 3)
-# Y = np.array([1,0,1,1,0,0])         # shape (2,)
-#
-# # Initialize parameters
-# wagi = np.random.rand(3)  *0.7     # 3 input features
-# biasy = 0.0
-# print(wagi)
-# # Momentum terms
-# Vderivative_like_weights = np.zeros_like(wagi)
-# Vb_like_bias = 0.0
-#
-# # Hyperparameters
-# alpha = 0.02    # learning rate
-# beta_momentum = 0.9     # momentum
-# epochs = 100
-#
-# # ReLU activation and its derivative
-# def relu(z):
-#     return np.maximum(0, z)
-#
-# def relu_derivative(z):
-#     return (z > 0).astype(float)
-#
-#
-# # Training loop
-# for epoch in range(epochs):
-#     dw = np.zeros_like(wagi)
-#     db = 0.0
-#     loss = 0
-#
-#     for i in range(len(X)):
-#         point = X[i]
-#         y = Y[i]
-#
-#         # Forward pass
-#         product = np.dot(wagi, point) + biasy
-#         output = relu(product)
-#
-#         # Compute loss (MSE)
-#         loss += 0.5 * (output - y) ** 2
-#
-#         # Backward pass
-#         pochodna_wyjścia = (output - y)
-#         pochodna_aktywacji = relu_derivative(product)
-#         gradient = pochodna_wyjścia*pochodna_aktywacji
-#         dw += gradient * point
-#         db += gradient
-#
-#     # Average gradients
-#     dw /= len(X)
-#     db /= len(X)
-#     loss /= len(X)
-#
-#     # Momentum update
-#     Vderivative_like_weights = beta_momentum * Vderivative_like_weights + (1- beta_momentum) * dw
-#     Vb_like_bias = beta_momentum * Vb_like_bias + (1-beta_momentum) * db
-#
-#     wagi -= alpha * Vderivative_like_weights
-#     biasy -= alpha * Vb_like_bias
-#
-#     if epoch % 10 == 0:
-#         print(f"Epoch {epoch}, Loss: {loss:.4f}")
-#
-# for i in range(len(X)):
-#     point = X[i]
-#     y = Y[i]
-#
-#     # Forward pass
-#     product = np.dot(wagi, point) + biasy
-#     output = relu(product)
-#
-# print("\nFinal weights:", wagi)
-# print("Final bias:", biasy)

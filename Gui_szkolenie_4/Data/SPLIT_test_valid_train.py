@@ -1,8 +1,10 @@
+import random
+
 import numpy as np
 import pandas as pd
 
 class SplitData:
-    __dict__ = ["train","valid","test"]
+    __dict__ = ["train","valid","test","groups"]
     """
         A class to split a dataset into training, validation, and test sets.
         Parameters:
@@ -13,13 +15,32 @@ class SplitData:
     train = 0.4
     valid = 0.4
     test = 0.2
+    groups =2
     @classmethod
-    def set(cls,train=0.6,valid=0.2,test=0.2):
+    def set(cls,train=0.6,valid=0.2,test=0.2,groups=2):
         cls.train = train  # 0.40
         cls.valid = valid  # 0.40
         cls.test = test  # 0.20
+        cls.groups=groups
+    @classmethod
+    def split_in_groups(cls,x,groups=None,size=0.7):
+        """
+        :param x: np.array data n feauters, f samples
+        :param y:  zmienna opisująca value
+        :param groups: number of groups for split to get indexes of data
+        :return: valid_index, train indexes
+        """
+        if groups!=None:
+            cls.groups=groups
+        from sklearn.model_selection import ShuffleSplit
+        groups_kFould =ShuffleSplit(n_splits=cls.groups,train_size=size)
 
 
+        return list(groups_kFould.split(x))
+    def get_in_order(self,list_of_kfolds:list=None):
+        kfold_order = list( range(0,len(list_of_kfolds)))
+        random.shuffle(kfold_order)
+        return kfold_order
 
     @classmethod
     def split_data(cls,data:pd.core.frame.DataFrame)->np.array:
@@ -31,8 +52,9 @@ class SplitData:
             cls.train+= 1 - (cls.valid+cls.test)
         if  0>cls.train+cls.valid+cls.test>1:
             raise "nie można podzielić zbioru podano podział który uwzględdnia ponad 100 % zbioru"
-        shuffled_data = data.sample(frac =1,random_state=32).reset_index(drop=True) #random_state=50
-        #shuffled_data = data
+        shuffled_data= data.sample(frac=1,random_state=43).reset_index(drop=True)
+
+
         ## augumentation, kkrotna walidacja skrośna,crossvalidation!!
         # cał zbiór jest dielony na ustaloną ilość,
         # trening odbywa się że z 5 jest wybierany jeden zbiór który jest wybierany na vaildacyjny
@@ -62,6 +84,7 @@ class SplitData:
     @classmethod
     def merge(cls,x,y)->pd.core.frame.DataFrame:
         """:return x and y merged into one dataframe with last colum named y"""
+        assert x.shape[0]==y.shape[0]," obiekty nie mają tego samego rozmiaru"
         data = pd.DataFrame(x, columns=[f"x{i}" for i in range(x.shape[1])])
         data["y"] = y
         return data

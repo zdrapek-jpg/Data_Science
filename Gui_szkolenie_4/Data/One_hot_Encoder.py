@@ -61,6 +61,8 @@ class OneHotEncoder:
                      :return for [0,1,0,0] ->b in pd.DataFrame
                      """
         new_data_frame_data= pd.DataFrame()
+        if isinstance(data, pd.Series):
+            data = data.to_frame()
         for column_name in data.columns:
 
 
