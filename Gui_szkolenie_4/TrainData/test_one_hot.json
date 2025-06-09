@@ -26,21 +26,21 @@
   },
   "job": {
     "label_code": {
-      "0": "retired",
+      "0": "admin.",
       "1": "entrepreneur",
-      "2": "management",
-      "3": "technician",
-      "4": "unemployed",
-      "5": "blue-collar",
-      "6": "student",
-      "7": "housemaid",
+      "2": "retired",
+      "3": "student",
+      "4": "services",
+      "5": "unemployed",
+      "6": "technician",
+      "7": "management",
       "8": "self-employed",
-      "9": "services",
-      "10": "admin.",
-      "11": "unknown1"
+      "9": "housemaid",
+      "10": "unknown1",
+      "11": "blue-collar"
     },
     "decoded_set": {
-      "retired": [
+      "admin.": [
         1.0,
         0.0,
         0.0,
@@ -68,7 +68,7 @@
         0.0,
         0.0
       ],
-      "management": [
+      "retired": [
         0.0,
         0.0,
         1.0,
@@ -82,12 +82,26 @@
         0.0,
         0.0
       ],
-      "technician": [
+      "student": [
         0.0,
         0.0,
         0.0,
         1.0,
         0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "services": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
         0.0,
         0.0,
         0.0,
@@ -101,20 +115,6 @@
         0.0,
         0.0,
         0.0,
-        1.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0
-      ],
-      "blue-collar": [
-        0.0,
-        0.0,
-        0.0,
-        0.0,
         0.0,
         1.0,
         0.0,
@@ -124,7 +124,7 @@
         0.0,
         0.0
       ],
-      "student": [
+      "technician": [
         0.0,
         0.0,
         0.0,
@@ -138,7 +138,7 @@
         0.0,
         0.0
       ],
-      "housemaid": [
+      "management": [
         0.0,
         0.0,
         0.0,
@@ -166,7 +166,7 @@
         0.0,
         0.0
       ],
-      "services": [
+      "housemaid": [
         0.0,
         0.0,
         0.0,
@@ -178,23 +178,23 @@
         0.0,
         1.0,
         0.0,
-        0.0
-      ],
-      "admin.": [
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        1.0,
         0.0
       ],
       "unknown1": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "blue-collar": [
         0.0,
         0.0,
         0.0,
@@ -213,17 +213,17 @@
   },
   "marital": {
     "label_code": {
-      "0": "married",
-      "1": "divorced",
+      "0": "divorced",
+      "1": "married",
       "2": "single"
     },
     "decoded_set": {
-      "married": [
+      "divorced": [
         1.0,
         0.0,
         0.0
       ],
-      "divorced": [
+      "married": [
         0.0,
         1.0,
         0.0
@@ -239,9 +239,9 @@
   "education": {
     "label_code": {
       "0": "unknown",
-      "1": "secondary",
-      "2": "primary",
-      "3": "tertiary"
+      "1": "tertiary",
+      "2": "secondary",
+      "3": "primary"
     },
     "decoded_set": {
       "unknown": [
@@ -250,19 +250,19 @@
         0.0,
         0.0
       ],
-      "secondary": [
+      "tertiary": [
         0.0,
         1.0,
         0.0,
+        0.0
+      ],
+      "secondary": [
+        0.0,
+        0.0,
+        1.0,
         0.0
       ],
       "primary": [
-        0.0,
-        0.0,
-        1.0,
-        0.0
-      ],
-      "tertiary": [
         0.0,
         0.0,
         0.0,

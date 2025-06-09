@@ -1,3 +1,5 @@
+import sys
+
 import numpy as np
 import pandas as pd
 from math import sqrt
@@ -23,7 +25,7 @@ class Transformations:
     """
     A class for performing different types of data transformations.
     """
-    __slots__ = ["data","minimums","maximums","srednie","odchylenia_w_kolumnach","std_type"]
+    __slots__ = ["data","minimums","maximums","srednie","odchylenia_w_kolumnach","std_type","epsilion"]
     def __init__(self,data=None,std_type:Union[StandardizationType,str]=StandardizationType.NORMALIZATION):
         """
                 Parameters:
@@ -40,6 +42,7 @@ class Transformations:
         self.srednie = []
         self.odchylenia_w_kolumnach = []
         self.std_type=std_type
+        self.epsilion = sys.float_info.epsilon
 
 
     def srednia(self,sequence_like_column)->float:
@@ -103,7 +106,7 @@ class Transformations:
                 srednia_kolumny = self.srednia(list_containing_column_values)
                 std =self.odchylenie_standardowe(srednia_kolumny,list_containing_column_values)
                 self.srednie.append(srednia_kolumny)
-                new_data[klucze[i]] = [round(((x -srednia_kolumny)/std),4) for x in list_containing_column_values]
+                new_data[klucze[i]] = [round(((x -srednia_kolumny)/(std+self.epsilion)),4) for x in list_containing_column_values]
 
         elif self.std_type.value =="log_scalling" :
             granica_0 =np.finfo(float).eps()

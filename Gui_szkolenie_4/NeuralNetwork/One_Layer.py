@@ -10,9 +10,9 @@ class LayerModificationMetaClass(type):
         def new_init(self, len_data, wyjscie_ilosc=1, activation_layer=None, optimizer=None, gradients=None):
             original_init(self, len_data, wyjscie_ilosc, activation_layer, optimizer, gradients)
             # initialization based on optimizer
-            if self.gradients in ["batch", "mini-batch"]:
-                self.weights_exponential_d = np.zeros((wyjscie_ilosc, len_data))
-                self.biases_exponential_d = np.zeros((wyjscie_ilosc,))
+
+            self.weights_exponential_d = np.zeros((wyjscie_ilosc, len_data))
+            self.biases_exponential_d = np.zeros((wyjscie_ilosc,))
 
             if self.optimizer in ["momentum", "adam","RMSprop"]:
                 self.v_weights = np.zeros((wyjscie_ilosc,len_data))
@@ -20,7 +20,7 @@ class LayerModificationMetaClass(type):
                 self.Beta1 = 0.95
             if self.optimizer in ["RMSprop","adam"]:
                 self.epsilion = 1e-8
-                self.Beta2 = 0.998
+                self.Beta2 = 0.999
             if self.optimizer=="adam":
                 self.timestep =1
                 self.m_weights =np.zeros((wyjscie_ilosc,len_data))
@@ -118,10 +118,20 @@ class LayerFunctions(metaclass=LayerModificationMetaClass):
               """
         ## obiczanie gradientu w pierwszej warstwie od konca
         if weights_forward is None and  gradient2 is None:
-            pochodna_aktywacji = self.derivations(y_pred)
+
             pochodna_wyjscia =y_pred-y_origin
             ### warstwy ukryte
+            if self.activation_layer == "softmax":
+                gradient = pochodna_wyjscia
+                self.biases_exponential_d =gradient
+                self.weights_exponential_d = np.outer(gradient,self.alfa)*point
+                self.backward_update_params()
+                return
+            pochodna_aktywacji = self.derivations(y_pred)
+
+
             gradient  = pochodna_wyjscia* pochodna_aktywacji
+
             self.biases_exponential_d = gradient
             self.weights_exponential_d= gradient*point.reshape(1,self.len_data)
             self.backward_update_params()
@@ -132,7 +142,7 @@ class LayerFunctions(metaclass=LayerModificationMetaClass):
         gradient =   np.dot(weights_forward.T,gradient2)
         gradient *= pochodna_aktywacji
         self.biases_exponential_d = gradient
-        self.weights_exponential_d= np.outer(gradient,self.alfa)*point
+        self.weights_exponential_d= np.outer(gradient,point)*point
         self.backward_update_params()
         return gradient
 
@@ -188,8 +198,8 @@ class LayerFunctions(metaclass=LayerModificationMetaClass):
             self.wagi -=self.alfa*m_hat_w/(np.sqrt(v_hat_w)+self.epsilion)
             self.bias -= self.alfa*m_hat_b/(np.sqrt(v_hat_b)+self.epsilion)
         else:
-            self.wagi-=self.weights_exponential_d
-            self.bias-= self.biases_exponential_d
+            self.wagi-=self.alfa * self.weights_exponential_d
+            self.bias-= self.alfa * self.biases_exponential_d
 
     def activation(self, suma_wazona):
         """
@@ -201,9 +211,14 @@ class LayerFunctions(metaclass=LayerModificationMetaClass):
             return z(suma_wazona)
         if self.activation_layer == "elu":
             return np.where(suma_wazona > 0, suma_wazona,
-                            np.where(suma_wazona < 0, 0.01 * (np.exp(suma_wazona) - 1), 0))
+                            np.where(suma_wazona < 0, self.alfa * (np.exp(suma_wazona) - 1), 0))
         if self.activation_layer == "relu":
             return np.maximum(0, suma_wazona)
+        if self.activation_layer =="softmax":
+            dul= sum(suma_wazona)
+            return suma_wazona/dul
+        else:
+            raise "brak zdefiniowanej funkcji aktywującej "
 
     def derivations(self, y_pred):
         """
@@ -219,21 +234,25 @@ class LayerFunctions(metaclass=LayerModificationMetaClass):
         if self.activation_layer == "relu":
             return np.where(y_pred >= 0, y_pred, 0)
 
-    def start(self, alfa=None):
+
+    def start(self, alfa=None,seed=32):
         """
+        :param seed:  seed for weights biases
         :param alfa is eta/alpha/learning rate we can give
            intialize parameters of layer  [alfa,bias, weight with  SHAPE = (self.len_data,wyjscia_ilosc).T]
            :return alfa
            """
         self.random_alfa(alfa)
-        self.random_bias()
-        self.random_weights()
+        self.random_bias(seed=seed)
+        self.random_weights(seed=seed)
         return self.alfa[0]
 
-    def random_weights(self):
+    def random_weights(self,seed=32):
+        np.random.seed(seed)
         self.wagi = np.random.uniform(low=-0.2,high=0.2,size=(self.wyjscia_ilosc,self.len_data))
 
-    def random_bias(self):
+    def random_bias(self,seed=32):
+        np.random.seed(seed)
         self.bias = np.random.uniform(low=-0.2,high=0.2,size=(self.wyjscia_ilosc,))
 
     def random_alfa(self,a=None):

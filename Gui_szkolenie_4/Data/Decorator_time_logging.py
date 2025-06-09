@@ -7,7 +7,8 @@ logging.basicConfig(
     level=logging.INFO,
     filename=r"C:\Program Files\Pulpit\Data_science\Gui_szkolenie_4\Data\logging_time.txt",
     format="%(asctime)s - %(message)s",
-    datefmt="%H:%M:%S"
+    datefmt="%H:%M:%S",
+    filemode="w"
 )
 def log_execution_time(function_to_measure):
     """
