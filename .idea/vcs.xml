@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Algorytmy_minimalno_odleglosciowe/K_means" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Gui_szkolenie_4/Frontend" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Neuron_SinglePerceptron_Normalization" vcs="Git" />
+  </component>
+</project>
