@@ -7,6 +7,7 @@ from NeuralNetwork.Network_single_class1 import NNetwork
 from Data.One_hot_Encoder import OneHotEncoder
 from Data.Transformers import Transformations
 import threading
+from Data.Decorator_time_logging import log_execution_time
 
 normalization_instance = None
 one_hot_instance = None
@@ -14,9 +15,10 @@ model_instance = None
 
 #tutaj ładujemy instancje klas stworzone przez Pawła, które będą potrzebne przy załadowaniu formularza
 #w momencie uruchomienia okienka GUI, wszystkie instancje klas są jednocześnie tworzone, a nie w momencie klik przycisku zatwierdz
+@log_execution_time
 def load():
     global normalization_instance, one_hot_instance, model_instance
-    normalization_instance = Transformations.load_data()  # instancja klasy normalizującej - ładujemy ją
+    normalization_instance = Transformations.load_data()  # instancja klasy normalizującej - ładujemy ją z pliku
     one_hot_instance = OneHotEncoder.load_data()  # plik json jest przypisane do klasy - tworzymy instancje klasy
     model_instance = NNetwork.create_instance()  # Create the model instance
     print(normalization_instance.std_type)
@@ -379,7 +381,7 @@ prediction_label.pack(pady=10)
 def set_label_value(prediction):
     prediction_label.config(text=f"Chance for client to leave the bank: {round(prediction[0], 2)}%")
 
-
+@log_execution_time
 def PobieramDaneFormularza():
 
     daneFormularza = [
@@ -403,7 +405,7 @@ def PobieramDaneFormularza():
     print(daneFormularza)
     print()
     return daneFormularza
-
+@log_execution_time
 def getprediction():
     pobranedane = PobieramDaneFormularza()
     data_forNN = modify_user_input_for_network(pobranedane, one_hot_instance, normalization_instance)
