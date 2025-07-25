@@ -1,6 +1,6 @@
                                       
 ## Bank client leave prediction
-**Pogrubienie**  Tools Stack  for Python 3.10.11:
+  Tools Stack  for Python 3.10.11:
 - **numpy  1.26.4**
 - **pandas 2.2.3**    
 - **matplotlib 3.7.0**
