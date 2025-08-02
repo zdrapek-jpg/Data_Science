@@ -148,4 +148,3 @@ def training(epochs,x,y,lr=0.01,size=0.6,min_acc=0.99,below_error=0.045):
     plt.tight_layout()
     plt.show()
 
-    plt.show()

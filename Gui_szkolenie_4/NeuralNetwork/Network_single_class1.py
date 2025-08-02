@@ -269,6 +269,22 @@ class NNetwork():
             j = class_to_index[predicted]
             conf_matrix[i][j] += 1
         return pd.DataFrame(conf_matrix,columns = list(classes))
+    @staticmethod
+    def ground_truth_matrix_multi_labels(y_pred:list,y_origin: list,cols:list[str]):
+        from numpy import zeros
+        assert isinstance(y_pred,(list,set)) and isinstance(y_origin,(list,set)),"obiekty przekazane do macierzy muszą być typu list() "
+        ilosc_wierszy = len(y_origin[0])
+        matrix = zeros((ilosc_wierszy,ilosc_wierszy))
+        for pred,origin  in zip(y_pred,y_origin):
+            matrix[np.argmax(origin)]+=pred
+        if len(cols)!=ilosc_wierszy:
+            raise Exception("ilosc klas niezgodna z iloscią wierszy ")
+        return pd.DataFrame(matrix,columns = cols)
+
+
+
+
+
 
 
 
